@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.QualityListMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.QualityList" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="quality_id" property="qualityId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="time" property="time" jdbcType="DATE" />
+  </resultMap>
+  <insert id="insert" parameterType="com.xiongantaoli.background.entity.QualityList" >
+    insert into quality_list (id, quality_id, order_id, 
+      time)
+    values (#{id,jdbcType=BIGINT}, #{qualityId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, 
+      #{time,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.QualityList" >
+    insert into quality_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="qualityId != null" >
+        quality_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="qualityId != null" >
+        #{qualityId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(*)
+    from quality_list where 1 = 1
+   	<if test="beginTime != null and beginTime != '' " >
+   		and time <![CDATA[>=]]> #{beginTime}
+   	</if>
+   	<if test="endTime != null and endTime != '' " >
+   		and time <![CDATA[<=]]> #{endTime}
+   	</if>
+  </select>
+  
+      <select id="selectUserId"  resultType="java.lang.Long" parameterType="java.lang.Long" >
+    select quality_id
+    from quality_list
+   		where order_id = #{orderId,jdbcType=BIGINT};
+ 	 </select>
+ 	 <select id="selectByOrderId"  resultType="java.lang.Integer" parameterType="java.lang.Long" >
+    select count(*)
+    from quality_list
+   		where order_id = #{orderId,jdbcType=BIGINT};
+ 	 </select>
+ 	 
+</mapper>

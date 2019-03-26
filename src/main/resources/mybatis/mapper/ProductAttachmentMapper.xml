@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.ProductAttachmentMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.ProductAttachment" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, `name`
+  </sql>
+  <select id="selectallattachment" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_attachment
+  </select>
+    <select id="selectattachment" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_attachment
+    where name like "%"#{name}"%"
+  </select>
+  <select id="selectattachmentbyname" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from product_attachment
+    where 
+    <if test="name != null" >
+        name=#{name} or
+    </if>
+    code=#{code}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+   select 
+    <include refid="Base_Column_List" />
+    from product_attachment where id=#{id}
+  </select>
+  <delete id="deletebyid" parameterType="java.lang.Integer" >
+    delete from product_attachment
+    where id = #{id}
+  </delete>
+  <insert id="insertattachment">
+  insert into product_attachment (code, name
+      )
+    values ( #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.ProductAttachment">
+    insert into product_attachment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.ProductAttachment" >
+    update product_attachment
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.ProductAttachment" >
+    update product_attachment
+    set code = #{code,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <insert id="updatebyid" parameterType="com.xiongantaoli.background.entity.ProductAttachment" >
+  insert into product_attachment (id,code,name)
+      values (#{id}, #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from product_attachment
+  </select>
+</mapper>

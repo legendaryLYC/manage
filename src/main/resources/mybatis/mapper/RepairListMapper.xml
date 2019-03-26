@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.RepairListMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.RepairList" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="repair_id" property="repairId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="repair_style" property="repairStyle" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, repair_id, order_id, repair_style, time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from repair_list
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    <select id="selectByOrderId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from repair_list
+    where order_id = #{orderId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from repair_list
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xiongantaoli.background.entity.RepairList" >
+    insert into repair_list (id, repair_id, order_id, 
+      repair_style, time)
+    values (#{id,jdbcType=BIGINT}, #{repairId,jdbcType=BIGINT}, #{orderId,jdbcType=BIGINT}, 
+      #{repairStyle,jdbcType=VARCHAR}, #{time,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.RepairList" >
+    insert into repair_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="repairId != null" >
+        repair_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="repairStyle != null" >
+        repair_style,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="repairId != null" >
+        #{repairId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="repairStyle != null" >
+        #{repairStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.RepairList" >
+    update repair_list
+    <set >
+      <if test="repairId != null" >
+        repair_id = #{repairId,jdbcType=BIGINT},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="repairStyle != null" >
+        repair_style = #{repairStyle,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.RepairList" >
+    update repair_list
+    set repair_id = #{repairId,jdbcType=BIGINT},
+      order_id = #{orderId,jdbcType=BIGINT},
+      repair_style = #{repairStyle,jdbcType=VARCHAR},
+      time = #{time,jdbcType=DATE}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from repair_list where 1 = 1
+   	<if test="beginTime != null and beginTime != '' " >
+   		and time <![CDATA[>=]]> #{beginTime}
+   	</if>
+   	<if test="endTime != null and endTime != '' " >
+   		and time <![CDATA[<=]]> #{endTime}
+   	</if>
+  </select>
+  <delete id="deleteByOrderId">
+  delete from repair_list
+  where order_id = #{key}
+  </delete>
+ <select id="selectUserId" resultType="java.lang.Long" parameterType="java.lang.Long" >
+    select repair_id
+    from repair_list
+   		where order_id = #{orderId,jdbcType=BIGINT};
+ </select>
+</mapper>

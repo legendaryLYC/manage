@@ -1,0 +1,520 @@
+<!DOCTYPE HTML>
+<html  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" >
+<head th:include="_meta :: header">
+    <title>交易记录</title>
+</head>
+<body>
+<style>
+    #orderState{
+        height:2.6em;
+        width:15em;
+        border: solid 1px #ddd;
+    }
+    .empty{
+        width:5px;
+        height:1.5em;
+    }
+    #stateContainer{
+        display:inline-block;
+    }
+
+    td input{
+        border:none;
+        width:100%;
+        font-size:14px;
+        line-height: 20px;
+    }
+</style>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 交易管理 <span class="c-gray en">&gt;</span> 交易列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px"  href="javascript:location.replace(location.href);" title="refresh" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+    <form action="#" th:action="@{/orderlist}"  method="post" id="listForm">
+        <div class="text-c">
+            <div class="row cl">
+                交易状态:<input type="text" class="input-text" style="width:250px;" placeholder="交易状态" name="state" th:value="${orderNew.getState()}" />&nbsp;&nbsp;
+                买家账户:<input type="text"  class="input-text" style="width:250px;" placeholder="买家账户"  name="buyer" th:value="${orderNew.getBuyer()}" />&nbsp;&nbsp;
+                回收快递单号:<input type="text"  class="input-text" style="width:250px;" placeholder="快递单号"  name="express" th:value="${orderNew.getExpress()}" />&nbsp;&nbsp;
+                <div class="formControls col-xs-5 col-sm-6" style="width: 15%;">
+                    <input type="text" style=" height: 25px;" placeholder="开始时间"
+                           autocomplete="off" id="purchaseTimeString" th:value = "${beginTime}" onfocus="WdatePicker({el:$dp.$('beginTime'),dateFmt:'yyyy-MM-dd'})"
+                           name="beginTime" class="input-text Wdate" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="empty"></div>
+            <div class="row cl">
+                交易编号:<input type="text" class="input-text" style="width:250px;" placeholder="交易编号" name="num" th:value="${orderNew.getNum()}" />&nbsp;&nbsp;
+                卖家账户:<input type="text"  class="input-text" style="width:250px;" placeholder="卖家账户"  name="seller" th:value="${orderNew.getSeller()}" />&nbsp;&nbsp;
+                售出快递单号:<input type="text"  class="input-text" style="width:250px;" placeholder="售出快递单号"  name="sellNumber" th:value="${orderNew.getSellNumber()}" />&nbsp;&nbsp;
+                <div class="formControls col-xs-5 col-sm-6" style="width: 15%;">
+                    <input type="text" style=" height: 25px;" placeholder="结束时间"
+                           autocomplete="off" id="purchaseTime" th:value = "${endTime}" text="开始时间" onfocus="WdatePicker({el:$dp.$('endTime'),dateFmt:'yyyy-MM-dd'})"
+                           name="endTime" class="input-text Wdate" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="empty"></div>
+            <div class="row cl">
+                <div class="col-xs-5  col-sm-6 col-xs-offset-3 col-sm-offset-2" >
+                    登记者:<input type="text"  class="input-text" style="width:250px;" placeholder="登记者"  name="user" th:value="${orderNew.getUser()}" />&nbsp;&nbsp;
+                    <button class="btn btn-success radius" id="subbtn" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"><i class="Hui-iconfont">&#xe665;</i> 查询交易记录</button>
+                </div>
+            </div>
+        </div>
+        <div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+            <a   href="javascript:;" th:onclick="'javascript:addNewRow()'" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 登记</a>
+		    <a    href="javascript:;" th:onclick="'javascript:deleteAll(\''+@{/orderlist/deleteNewOrder}+'\')'"  class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i>批量删除</a>
+            <a  sec:authorize="hasAuthority('/orderlist/downloadPartExcel')" href="javascript:;" th:onclick="'javascript:downloadAll(\''+@{/orderlist/downloadPartExcel}+'\')'" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 导出全部数据</a>
+            <a  sec:authorize="hasAuthority('/orderlist/downloadPartExcel')" href="javascript:;" th:onclick="'javascript:downloadPart(\''+@{/orderlist/downloadPartExcel}+'\')'" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 导出选中数据</a>
+		</span>
+            <span class="r">共有数据：<strong th:text="${pageInfo.total}"></strong> 条</span>
+
+        </div>
+        <input type="hidden" name="pageNo" id="pageNo" th:value="${pageInfo.pageNum}"/>
+        <input type="hidden" id="total" name="total" th:value="${pageInfo.total}"  />
+    </form>
+    <div  style="width:100%;overflow-x: scroll;">
+        <table class="table table-border table-bordered table-bg" id="tbl" style="width:200%;">
+            <thead>
+                <tr>
+                    <th scope="col" colspan="20">交易列表</th>
+                </tr>
+                <tr class="text-c">
+                    <th ><input type="checkbox" name="" id="checkBox_selectAll" value=""/></th>
+                    <th >编号</th>
+                    <th >日期</th>
+                    <th >型号</th>
+                    <th>颜色</th>
+                    <th>版本</th>
+                    <th>内存</th>
+                    <th width="100">卖家账号</th>
+                    <th>回收快递单号</th>
+                    <th>收购价格</th>
+                    <th>收购运费</th>
+                    <th>维修价格</th>
+                    <th>出售价格</th>
+                    <th>出售运费</th>
+                    <th>利润</th>
+                    <th width="100">买家账号</th>
+                    <th>售出快递单号</th>
+                    <th>交易状态</th>
+                    <th width="150">备注</th>
+                    <th>登记者</th>
+                    <th width="80">操作</th>
+                </tr>
+            </thead>
+            <tbody id="tab">
+                <tr class="text-c" th:if="${pageInfo.list.size() == 0}"><td colspan="20"><strong>暂无数据</strong></td></tr>
+                <tr  class="text-c"  th:each="order:${pageInfo.list}" >
+                    <form id="form_changeStu"  action="/orderlist/updateNewOrder" method="post"  autocomplete="on" class="form_changeStu">
+                    <td><input  type="checkbox" th:value="${order.getId()}" class="checkBox_id"value="" name="id" /></td>
+                        <td><span th:text="${order.num}" class="span_stu"></span><input  type="hidden" th:value="${order.getId()}" value="" name="id" /><input type="text" th:value="${order.num}"class="input_changeStu" name="num" style="display: none;"></td>
+                        <td><span th:text="${#calendars.format(order.getDate(),'yyyy-MM-dd')}" class="span_stu"></span><input  class="input-text Wdate input_changeStu"  style="display: none;"onfocus="WdatePicker({el:$dp.$('order.date'),dateFmt:'yyyy-MM-dd'})"  autocomplete="off" value="" placeholder="采购时间" id="purchaseTime" type="text" th:value="${#dates.format(order.getDate(), 'yyyy-MM-dd')}"  name="purchaseTime" ></td>
+                        <td><span th:text="${order.getModel()}" class="span_stu"></span><input type="text" th:value="${order.getModel()}" class="input_changeStu" style="display: none;"name="model" ></td>
+                        <td><span th:text="${order.getColor()}" class="span_stu"></span><input type="text" th:value="${order.getColor()}" class="input_changeStu" style="display: none;" name="color" ></td>
+                        <td><span th:text="${order.getVersion()}" class="span_stu"></span><input type="text" th:value="${order.getVersion()}" class="input_changeStu" style="display: none;" name="version"  ></td>
+                        <td><span th:text="${order.getMemory()}" class="span_stu"></span><input type="text" th:value="${order.getMemory()}" class="input_changeStu" style="display: none;" name="memory"  ></td>
+                        <td><span th:text="${order.getSeller()}" class="span_stu"></span><input type="text" th:value="${order.getSeller()}" class="input_changeStu" style="display: none;" name="seller"  ></td>
+                        <td><span th:text="${order.getExpress()}" class="span_stu"></span><input type="text" th:value="${order.getExpress()}" class="input_changeStu"  style="display: none;" name="express" ></td>
+                        <td><span th:text="${order.getPurchasePrice()}"  th:if="${order.getPurchasePrice()}"class="span_stu"></span><span th:if="not ${order.getPurchasePrice()}" class="span_stu">0</span><input type="text"  th:value="${order.getPurchasePrice()}" class="input_changeStu" style="display: none;" name="purchasePrice"></td>
+                        <td><span th:text="${order.getPurchaseExpress()}" th:if="${order.getPurchaseExpress()}"class="span_stu"></span><span th:if="not ${order.getPurchaseExpress()}" class="span_stu">0</span><input type="text" th:value="${order.getPurchaseExpress()}" class="input_changeStu"  style="display: none;" name="purchaseExpress" ></td>
+                        <td><span th:text="${order.getRepairPrice()}" th:if="${order.getRepairPrice()}"class="span_stu"></span><span th:if="not ${order.getRepairPrice()}" class="span_stu">0</span><input type="text" th:value="${order.getRepairPrice()}" class="input_changeStu" style="display: none;" name="repairPrice"></td>
+                        <td><span th:text="${order.getSellPrice()}"th:if="${order.getSellPrice()}" class="span_stu"></span><span th:if="not ${order.getSellPrice()}" class="span_stu">0</span><input type="text" th:value="${order.getSellPrice()}" class="input_changeStu"style="display: none;"  name="sellPrice"  ></td>
+                        <td><span th:text="${order.getSellExpress()}" th:if="${order.getSellExpress()}"  class="span_stu"></span><span th:if="not ${order.getSellExpress()}" class="span_stu">0</span><input type="text" th:value="${order.getSellExpress()}" class="input_changeStu" style="display: none;" name="sellExpress"  ></td>
+                        <td><span th:text="${order.getProfit()}"th:if="${order.getProfit()}" class="span_stu"></span><span th:if="not ${order.getProfit()}" class="span_stu">0</span><input type="text" th:value="${order.getProfit()}" class="input_changeStu" style="display: none;" name="profit" ></td>
+                        <td><span th:text="${order.getBuyer()}" class="span_stu"></span><input type="text" th:value="${order.getBuyer()}" class="input_changeStu" style="display: none;"  name="buyer"></td>
+                        <td><span th:text="${order.getSellNumber()}" class="span_stu"></span><input type="text" th:value="${order.getSellNumber()}" class="input_changeStu" style="display: none;" name="sellNumber" ></td>
+                        <td><span th:text="${order.getState()}" class="span_stu"></span><!--<input type="text" th:value="${order.getState()}" class="input_changeStu" style="display: none;" name="state"  ></td>-->
+                    <select id="state" name="state" class="text-input input_changeStu"   style="display: none;">
+                        <option  th:text="${order.getState()}" th:value="${order.getState()}"></option>
+                        <option th:if="${order.getState()} != 未签收" th:text="未签收" th:value="未签收"></option>
+                        <option th:if="${order.getState()} != 维修中" th:text="维修中" th:value="维修中"></option>
+                        <option th:if="${order.getState()} != 待售中" th:text="待售中" th:value="待售中"></option>
+                        <option th:if="${order.getState()} != 已售出" th:text="已售出" th:value="已售出"></option>
+                        <option th:if="${order.getState()} != 退货中"th:text="退货中" th:value="退货中"></option>
+                        <option th:if="${order.getState()} != 交易完成" th:text="交易完成" th:value="交易完成"></option>
+                    </select>
+                        <td><span th:text="${order.getRemark()}" class="span_stu"></span><input type="text" th:value="${order.getRemark()}" class="input_changeStu"style="display: none;"  name="remark"  ></td>
+                        <td><span th:text="${order.getUser()}" class="span_stu"></span><input type="text" th:value="${order.getUser()}" class="input_changeStu"style="display: none;"  name="user" ></td>
+
+                        <td th:id="${order.id}"><i id="icon" class="change"  ><i class="Hui-iconfont changeIcon" style="font-size: 17px;cursor: pointer;" title="编辑">&#xe6df;</i>
+                            <i   class="Hui-iconfont " style="font-size: 17px;cursor: pointer;" th:onclick="'javascript:deleteOne(this,\''+@{/orderlist/deleteNewOrder}+'\')'"  title="删除">&#xe6e2;</i></i>
+                            <input   type="submit" value="确认" style="display: none;width: 50px;height:20px;border-left:none;border-bottom:none;border-top:none;border-right: 1px white solid;background-color: #5a98de;color:white;border-top-left-radius: 5px;border-bottom-left-radius: 5px;cursor: pointer;">
+                            <input type="reset" value="取消" class="button_changeCancel" style="display: none;width: 50px;height:20px;border:none;background-color: #5a98de;color:white;cursor: pointer;border-top-right-radius: 5px;border-bottom-right-radius: 5px;"></td>
+                    </form>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+        <!--<form>-->
+            <div th:include="_pagination :: page" ></div>
+        <!--</form>-->
+
+</div>
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footerorder :: footerjs">
+</div>
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.js}" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.js}"  src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"  src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script>
+    var errorString = "";
+    var uploadFlag = "true";
+</script>
+
+<script type="text/javascript">
+    /*
+        参数解释：
+        title	标题
+        url		请求的url
+        id		需要操作的数据id
+        w		弹出层宽度（缺省调默认值）
+        h		弹出层高度（缺省调默认值）
+    */
+    /*管理员-权限-添加*/
+    function admin_permission_add(title,url,w,h){
+        layer_show(title,url,w,h);
+    }
+    /*管理员-权限-编辑*/
+    function admin_permission_edit(title,url,id,w,h){
+        layer_show(title,url,w,h);
+    }
+    /*$(function(){
+
+        $("#form_changeStu").validate({
+            rules:{
+
+            },
+            onkeyup:false,
+            success:"valid",
+            submitHandler:function(form){
+                $(form).ajaxSubmit({
+                    type: 'post',
+                    url: "/orderlist/updateNewOrder" ,
+                    success: function(data){
+                        if(data.code == "000000"){
+                            //禁止重复提交
+                            $('#subbtn').attr("type","button");
+                            layer.msg("操作成功！",{icon:1,time:1000},function(){
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.location.reload();
+                            });
+                        }else{
+                            layer.msg('操作失败!请检查输入数据',{icon:2,time:1000});
+                        }
+                    },
+                    error: function(XmlHttpRequest, textStatus, errorThrown){
+                        layer.msg('error!',{icon:2,time:1000});
+                    }
+                });
+
+            }
+        });
+    });*/
+    // 改变颜色
+    $(function(){
+        var tabEle = document.getElementById("tbl");
+        var len = tabEle.tBodies[0].rows.length;
+        for(var i=0;i<len;i++) {
+            if (tabEle.tBodies[0].rows[i].cells[17].innerText == "维修中") {
+                tabEle.tBodies[0].rows[i].style.backgroundColor = "blue";
+            }
+            if (tabEle.tBodies[0].rows[i].cells[17].innerText == "待售中"){
+                tabEle.tBodies[0].rows[i].style.backgroundColor="pink";
+            }
+            if (tabEle.tBodies[0].rows[i].cells[17].innerText == "已售出"){
+                tabEle.tBodies[0].rows[i].style.backgroundColor="green";
+            }
+            if (tabEle.tBodies[0].rows[i].cells[17].innerText == "退货中"){
+                tabEle.tBodies[0].rows[i].style.backgroundColor="red";
+            }
+            if (tabEle.tBodies[0].rows[i].cells[17].innerText == "交易完成"){
+                tabEle.tBodies[0].rows[i].style.backgroundColor="yellow";
+            }
+        }
+
+    });
+
+    $(".changeIcon").click(function(){
+        $(this).parent().parent().siblings().children(".input_changeStu").toggle("fast");
+        $(this).parent().parent().siblings().children(".span_stu").toggle("fast");
+        $(this).parent().siblings().show();
+        $(this).parent().hide();
+    });
+    $(".button_changeCancel").click(function () {
+        $(this).siblings().hide();
+        $(this).siblings(".change").show();
+        $(this).parent().siblings().children(".input_changeStu").toggle("fast");
+        $(this).parent().siblings().children(".span_stu").toggle("fast");
+        $(this).hide();
+    });
+
+    var selectAll = false;
+    $("#checkBox_selectAll").click(function () {
+        if(!selectAll)
+        {
+            $(".checkBox_id").prop("checked", true);
+            selectAll = true;
+        }
+        else
+        {
+            $(".checkBox_id").prop("checked", false);
+            selectAll = false;
+        }
+    });
+
+
+
+</script>
+
+
+<script>
+
+    /*采购记录-删除*/
+    function deleteOne(obj,url){
+        var id=$(obj).parent().parent().attr('id');
+        var listid = new Array();
+        listid[0]=id;
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                data:JSON.stringify(listid),
+                contentType:"application/json",
+                success: function(data){
+                    if(data.code == "000000"){
+                        layer.msg('删除成功!',{icon:1,time:1000});
+                        setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+                            window.location.reload();//页面刷新
+                        },500);
+                    }else{
+                        layer.msg('删除失败!',{icon:5,time:1000});
+                    }
+                },
+                error:function(data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+    //批量删除
+    function deleteAll(url){
+        var _list = new Array();
+        $('input[name="id"]:checked').each(
+            function (i) {
+                _list[i] = $(this).val();
+            });
+        if(_list.length == 0){
+            layer.msg("请选择删除的交易项");
+            return false;
+        }
+        layer.confirm('确定要删除选中的全部数据吗？', {
+            btn : [ '确定', '取消' ]
+            // 按钮
+        }, function() {
+            $.ajax({
+                url:url,// 跳转到 action
+                data:JSON.stringify(_list),
+                type:'post',
+                cache:false,
+                dataType:'json',
+                contentType:"application/json",  //发送信息至服务器时内容编码类型。
+                success:function(data) {
+                    if(data.code == "000000"){
+                        layer.msg('删除成功!',{icon:1,time:1000});
+                        setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+                            window.location.reload();//页面刷新
+                        },500);
+                    }else{
+                        layer.msg('删除失败!',{icon:5,time:1000});
+                    }
+                },
+                error : function() {
+                    layer.msg("异常！");
+                }
+            });
+        }, function() {
+
+        });
+    }
+    function addNewRow(){
+        var trHTML = "<tr class=\"text-c \" id='newadd'><td><input  type=\"checkbox\"  class=\"checkBox_id\"/></td><td  id='num'><input type=\"text\"  id='num'  name=\"num\" ></td>" +
+            "                        <td id='purchaseTime'><input   class=\"input-text Wdate \"  onfocus=\"WdatePicker({el:$dp.$('order.date'),dateFmt:'yyyy-MM-dd'})\"  autocomplete=\"off\" value=\"\" placeholder=\"采购时间\" id=\"purchaseTime\" type=\"text\"  name=\"purchaseTime\"  ></td>" +
+            "                        <td id='model'><input id='model' type=\"text\"  name=\"model\"  ></td>\n" +
+            "                        <td id='color'><input id='color' type=\"text\"  name=\"color\" ></td>\n" +
+            "                        <td id='version'><input id='version' type=\"text\"   name=\"version\" ></td>\n" +
+            "                        <td id='memory'><input id='memory' type=\"text\"   name=\"memory\" ></td>\n" +
+            "                        <td  id='seller'><input id='seller' type=\"text\"   name=\"seller\" ></td>\n" +
+            "                        <td  id='express'><input id='express' type=\"text\"   name=\"express\" ></td>\n" +
+            "                        <td  id='purchasePrice'><input id='purchasePrice' type=\"text\"   name=\"purchasePrice\" ></td>\n" +
+            "                        <td  id='purchaseExpress'><input id='purchaseExpress' type=\"text\"   name=\"purchaseExpress\"></td>\n" +
+            "                        <td  id='repairPrice'><input id='repairPrice' type=\"text\"   name=\"repairPrice\"  ></td>\n" +
+            "                        <td  id='sellPrice'><input id='sellPrice' type=\"text\"   name=\"sellPrice\"  ></td>\n" +
+            "                        <td  id='sellExpress'><input id='sellExpress' type=\"text\"  name=\"sellExpress\"  ></td>\n" +
+            "                        <td  id='profit'><input id='profit' type=\"text\"   name=\"profit\" ></td>\n" +
+            "                        <td  id='buyer'><input id='buyer' type=\"text\"   name=\"buyer\"  ></td>\n" +
+            "                        <td  id='sellNumber'><input id='sellNumber' type=\"text\"   name=\"sellNumber\" ></td>\n" +
+            "                        <td  id='state'><select id=\"addstate\" class=\"easyui-combobox\" name=\"state\"   >\n" +
+            "                        <option  text='未签收' value='未签收'>未签收</option>\n" +
+            "                        <option  text='维修中' value='维修中'>维修中</option>\n" +
+            "                        <option  text='待售中' value='待售中'>待售中</option>\n" +
+            "                        <option  text='已售出' value='已售出'>已售出</option>\n" +
+            "                        <option text='退货中' value='退货中'>退货中</option>\n" +
+            "                        <option  text='交易完成' value='交易完成'>交易完成</option></select></td>\n" +
+            "                        <td  id='remark'><input id='remark' type=\"text\"   name=\"remark\"  ></td>\n" +
+            "                        <td id='user'><input id='user' type=\"text\"   name=\"user\"  ></td>\n  " +
+            "                        <td><a title=\"取消\" href=\"javascript:;\"onclick =\"cancel(this)\"class=\"ml-5\" style=\"font-size:17px;text-decoration:none\"><i class=\"Hui-iconfont\">&#xe66b;</i></a>\n" +
+            "                            <a title=\"添加\" href=\"javascript:;\"onclick =\"addnew(this)\"class=\"ml-5\" style=\"font-size:17px;text-decoration:none\"><i class=\"Hui-iconfont\">&#xe604;</i></a>\n" +
+            "                            </td></tr>";
+        $("#tab").append(trHTML);
+
+
+    }
+
+    function cancel(obj) {
+        $(obj).parent().parent().remove();
+    }
+    function addnew(obj){
+        var1 = $(obj).parent().siblings("#num").children("#num").val();
+        var2 = $(obj).parent().siblings("#purchaseTime").children("#purchaseTime").val();
+        var3 = $(obj).parent().siblings("#model").children("#model").val();
+        var4 = $(obj).parent().siblings("#color").children("#color").val();
+        var5 = $(obj).parent().siblings("#version").children("#version").val();
+        var6 = $(obj).parent().siblings("#seller").children("#seller").val();
+        var7 = $(obj).parent().siblings("#express").children("#express").val();
+        var8 = $(obj).parent().siblings("#purchasePrice").children("#purchasePrice").val();
+        var9 = $(obj).parent().siblings("#purchaseExpress").children("#purchaseExpress").val();
+        var10 = $(obj).parent().siblings("#repairPrice").children("#repairPrice").val();
+        var11 = $(obj).parent().siblings("#sellPrice").children("#sellPrice").val();
+        var12 = $(obj).parent().siblings("#sellExpress").children("#sellExpress").val();
+        var13 = $(obj).parent().siblings("#profit").children("#profit").val();
+        var14 = $(obj).parent().siblings("#buyer").children("#buyer").val();
+        var15 = $(obj).parent().siblings("#sellNumber").children("#sellNumber").val();
+        var16 = $(obj).parent().siblings("#state").children("#addstate").val();
+        var17 = $(obj).parent().siblings("#remark").children("#remark").val();
+        var18 = $(obj).parent().siblings("#user").children("#user").val();
+        var19 = $(obj).parent().siblings("#memory").children("#memory").val();
+       $.ajax({
+            url:"/orderlist/addNewOrder",// 跳转到 action
+            data:{
+                'num':var1,
+                'purchaseTime':var2,
+                'model':var3,
+                'color':var4,
+                'version':var5,
+                'seller':var6,
+                'express':var7,
+                'purchasePrice':var8,
+                'purchaseExpress':var9,
+                'repairPrice':var10,
+                'sellPrice':var11,
+                'sellExpress':var12,
+                'profit':var13,
+                'buyer':var14,
+                'sellNumber':var15,
+                'state':var16,
+                'remark':var17,
+                'user':var18,
+                'memory':var19
+            },
+            type:'post',
+            success:function(data) {
+                if(data.code == "000000"){
+                    window.location.reload();//页面刷新
+                }else{
+                    alert(data.message);
+                }
+            },
+            error : function() {
+                alert(data.message);
+            }
+        });
+
+    }
+
+
+</script>
+<script>
+
+    function downloadPart(url){
+        var _list = new Array();
+        $('input[name="id"]:checked').each(
+            function (i) {
+                _list[i] = $(this).val();
+                // console.log(_list[i]);
+            });
+        if(_list.length > 0){
+            layer.confirm('确认要下载吗?', {
+                btn : [ '确定', '取消' ]
+                // 按钮
+            }, function() {
+                layer.closeAll('dialog');
+                $.ajax({
+                    url:url,// 跳转到 action
+                    data:JSON.stringify(_list),
+                    type:'post',
+                    async:true,
+                    cache:false,
+                    contentType:"application/json",  //发送信息至服务器时内容编码类型。
+                    success:function(data) {
+                        ajaxFileDownload(data.file, data.filename);
+                        layer.msg("下载成功!");
+                    },
+                    error : function() {
+                        layer.msg("下载失败，请重新下载！");
+                    }
+                });
+            }, function() {
+            });
+        }else{
+            layer.msg("Please select the download item!");
+        }
+    }
+    //批量下载
+    function downloadAll(url){
+        var _list = new Array();
+        $('input[name="id"]:checked').each(
+            function (i) {
+                _list[i] = $(this).val();
+                // console.log(_list[i]);
+            });
+        layer.confirm('确认要全部下载吗?', {
+            btn : [ '确定', '取消' ]
+            // 按钮
+        }, function() {
+            layer.closeAll('dialog');
+            $.ajax({
+                url:url,// 跳转到 action
+                data:JSON.stringify(_list),
+                type:'post',
+                async:true,
+                cache:false,
+                contentType:"application/json",  //发送信息至服务器时内容编码类型。
+                success:function(data) {
+                    ajaxFileDownload(data.file, data.filename);
+                    layer.msg("下载成功!");
+                },
+                error : function() {
+                    layer.msg("下载失败，请重新下载！");
+                }
+            });
+        }, function() {
+        });
+    }
+    function ajaxFileDownload(data,filename) {
+        var a = document.createElement('a');
+        var bstr =window.atob(data), n = bstr.length, u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        var blob =  new Blob([u8arr], { type: "application/octet-stream" });
+        var url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
+</script>
+</body>
+</html>

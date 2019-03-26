@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.QualityRoyaltyMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.QualityRoyalty" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="royalty" property="royalty" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, royalty
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from quality_royalty
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from quality_royalty
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xiongantaoli.background.entity.QualityRoyalty" >
+    insert into quality_royalty (id, royalty)
+    values (#{id,jdbcType=BIGINT}, #{royalty,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.QualityRoyalty" >
+    insert into quality_royalty
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="royalty != null" >
+        royalty,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="royalty != null" >
+        #{royalty,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.QualityRoyalty" >
+    update quality_royalty
+    <set >
+      <if test="royalty != null" >
+        royalty = #{royalty,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.QualityRoyalty" >
+    update quality_royalty
+    set royalty = #{royalty,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="selectQualityPrice" parameterType="java.lang.Integer" resultType="java.math.BigDecimal"  >
+    select royalty
+    from quality_royalty
+    where id = 1
+  </select>
+</mapper>

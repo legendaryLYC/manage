@@ -1,0 +1,426 @@
+<!DOCTYPE HTML>
+<html  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="_meta :: header">
+<title>质检列表</title>
+</head>
+<body>
+<style>
+	#orderState{
+		height:2.6em;
+		width:15em;
+		border: solid 1px #ddd;
+	}
+	.empty{
+		width:5px;
+		height:3em;
+	}
+	#stateContainer{
+		display:inline-block;
+	}
+</style>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 质检管理 <span class="c-gray en">&gt;</span> 质检列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="page-container">
+<form action="#" th:action="@{/quality}"  method="post">
+	<div class="text-c">
+		<input type="text" class="input-text" style="width:250px" 
+			placeholder="物流单号" id="orderNum" name="orderNum" th:value="${order.orderNum}"/>
+		<input type="text" class="input-text" style="width:250px" 
+			placeholder="手机序列号" id="serialNum" name="serialNum" th:value="${order.serialNum}"/>
+		<input type="text" class="input-text" style="width:250px;display:none;"
+			placeholder="经办人" id="operator" name="operator" th:value="${order.operator}"/>
+		<input type="text" class="input-text" style="width:250px;"
+			placeholder="订单编号" id="id" name="id" th:value="${order.id}"/>
+		<input type="text" class="input-text" style="width:250px; display:none;" 
+			autocomplete="off" readonly="readonly"
+			placeholder="采购时间" id="purchaseTimeString" name="purchaseTimeString" 
+			onfocus="WdatePicker({el:$dp.$('purchaseTime'),dateFmt:'yyyy-MM-dd'})" 
+			th:value="${#dates.format(order.purchaseTime, 'yyyy-MM-dd')}"/>
+		<div id="stateContainer" style="display:none;">
+ 		<label>订单状态:</label> 
+			<select id="orderState" name="orderState"  class="text-input" 
+				th:field="${order.orderState}">
+				<option value="">待选择</option>
+				<option th:each="state:${ProductStates}" th:text="${state.name}"
+					th:value="${state.code}">空
+				</option>
+			</select>
+		</div>
+		<div class="empty"></div>
+		<div class="row cl">
+			<div class="col-xs-4 col-sm-4 col-xs-offset-4 col-sm-offset-4">
+				<button class="btn btn-success radius" id="subbtn" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"><i class="Hui-iconfont">&#xe665;</i> 查询待质检记录</button>
+			</div>
+		</div>
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+		<span class="l">
+			<a  href="javascript:;" 
+				th:onclick="'javascript:changeState(\''+@{/quality/changeState}+'\',3)'"
+				class="btn btn-success radius"><i class="Hui-iconfont">&#xe676;</i> 
+				进入良品库
+			</a>
+			<a href="javascript:;" th:onclick="'javascript:changeState2(\''+@{/quality/changeState}+'\',5)'"
+				class="btn btn-danger radius"><i class="Hui-iconfont">&#xe706;</i>
+				退回
+			</a>
+			<a href="javascript:;" th:onclick="'javascript:changeState(\''+@{/quality/changeState}+'\',2)'"
+				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe63c;</i>
+				维修
+			</a>
+		</span>
+	<span class="r">共有数据：<strong th:text="${pageInfo.total}"></strong> 条</span> 
+	</div>
+	<table class="table table-border table-bordered table-bg">
+		<thead>
+			<tr>
+				<th scope="col" colspan="11">采购清单</th>
+			</tr>
+			<tr class="text-c">
+				<th width="25"><input type="checkbox" name="" value=""/></th>
+				<th width="40">序号</th>
+				<th width="150">采购方式</th>
+				<th width="60">品牌</th>
+				<th width="150">型号</th>
+				<th width="130">颜色</th>
+				<th width="90">订单状态</th>
+				<th width="180">退货退款物流单号</th>
+				<th width="130">经办人</th>
+				<th width="100">采购时间</th>
+				<!-- <th width="100">最终收购时间</th> -->
+				<th width="100">操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr class="text-c" th:if="${pageInfo.getSize() == 0}"><td colspan="15"><strong>暂无数据</strong></td></tr>
+			<tr class="text-c" th:each="order:${pageInfo.list}">
+				<td>
+					<input type="checkbox" value="1" th:value="${order.id}" name="id"/>
+					<span class="qualityPriceRecord" th:text="${order.qualityPrice}" 
+						style= "display:none"></span>
+					<span class="finalPurchaseRecord" th:text="${order.finalPurchase}" 
+						style= "display:none"></span>
+				</td>
+				<td th:text="${order.id}"></td>
+				<td th:text="${order.dicMethodDescription}"></td>
+				<td th:text="${order.productBrandName}"></td>
+				<td th:text="${order.productModelName}"></td>
+				<td th:text="${order.productColorName}"></td>
+				<td th:text="${order.productStateName}" class="states"></td>
+				<td th:text="${order.drawBackLogisticsNum}"></td>
+				<td th:text="${order.operator}"></td>
+				<td th:text="${#calendars.format(order.purchaseTime,'yyyy-MM-dd')}"></td>
+				<!-- <td th:text="${#calendars.format(order.finalTime,'yyyy-MM-dd')}"></td> -->
+<!--			<td class="td-status" th:if="${user.available}"><span class="label label-success radius" >已启用</span></td>
+				<td class="td-status" th:unless="${user.available}"><span class="label radius">已停用</span></td>
+				
+				<td class="td-manage">
+					<a title="编辑" sec:authorize="hasAuthority('/user/edit-user')"  
+						href="javascript:;" th:onclick="'javascript:admin_edit(\'编辑管理员信息\',\'user'+@{/edit-user}+'/'+${user.id}+'\',800,400)'" 
+						class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>-->
+				<td class="td-manage">
+					<a title="编辑 " href="javascript:;" 
+						th:onclick="'javascript:admin_edit(\'编辑订单信息\',\'quality'+@{/updateOrderPage}+'?id='+${order.id}+'\',800,400)'" 
+						class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df; </i></a>
+					<a title="删除" href="javascript:;"
+						th:onclick="'javascript:admin_del(this,\'purchase'+@{/deleteOrder}+'?id='+${order.id}+'\')'" 
+						class="ml-5" style="text-decoration:none; display:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+				</td>
+			</tr>
+			
+		</tbody>
+	</table>
+	<div th:include="_pagination :: page"></div>
+	</form>
+</div>
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs">
+</div>
+<!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}" src="lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" th:src="@{/lib/datatables/1.10.0/jquery.dataTables.min.js}" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" th:src="@{/lib/laypage/1.2/laypage.js}" src="lib/laypage/1.2/laypage.js"></script>
+<script type="text/javascript">
+//退款标红
+$('.states').each(function(){
+	if($(this).text()=="退款"){
+		$(this).css('color','red');
+	}else{
+		$(this).next().text("未退款");
+	}
+});
+/*
+	参数解释：
+	title	标题
+	url		请求的url
+	id		需要操作的数据id
+	w		弹出层宽度（缺省调默认值）
+	h		弹出层高度（缺省调默认值）
+*/
+/*管理员-增加*/
+function admin_add(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+
+/*管理员-编辑*/
+function admin_edit(title,url,w,h){
+	layer_show(title,url,w,h);
+}
+/*采购记录-删除*/
+function admin_del(obj,url){
+	layer.confirm('确认要删除吗？',function(index){
+		$.ajax({
+			type: 'POST',
+			url: url,
+			dataType: 'json',
+			success: function(data){
+				if(data.message == "success"){
+					window.location.reload();
+				}else{
+					layer.msg('删除失败!',{icon:5,time:1000});
+				}
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});		
+	});
+}
+
+/*管理员-停用*/
+function admin_stop(obj,url){
+	layer.confirm('确认要停用吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		$.ajax({
+			type: 'POST',
+			url: url,
+			dataType: 'json',
+			success: function(data){
+				if(data == 1){
+					$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_start(this,\''+url+'\')" href="javascript:;" title="启用" style="text-decoration:none"><i class="Hui-iconfont">&#xe615;</i></a>');
+					$(obj).parents("tr").find(".td-status").html('<span class="label radius">已停用</span>');
+					$(obj).remove();
+					layer.msg('已停用!',{icon: 6,time:1000});
+				}else{
+					layer.msg('启用失败!',{icon:5,time:1000});
+				}
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+/*管理员-启用*/
+function admin_start(obj,url){
+	layer.confirm('确认要启用吗？',function(index){
+		//此处请求后台程序，下方是成功后的前台处理……
+		$.ajax({
+			type: 'POST',
+			url: url,
+			dataType: 'json',
+			success: function(data){
+				if(data == 1){
+					$(obj).parents("tr").find(".td-manage").prepend('<a onClick="admin_stop(this,\''+  url  +'\')" href="javascript:;" title="停用" style="text-decoration:none"><i class="Hui-iconfont">&#xe631;</i></a>');
+					$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
+					$(obj).remove();
+					layer.msg('已启用!', {icon: 6,time:1000});
+				}else{
+					layer.msg('启用失败!',{icon:5,time:1000});
+				}
+			},
+			error:function(data) {
+				console.log(data.msg);
+			},
+		});
+	});
+}
+
+//批量删除
+function deleteAll(url){
+	var _list = new Array();
+	$('input[name="id"]:checked').each(
+          function (i) {
+          	_list[i] = $(this).val();
+          });
+	if(_list.length == 0){
+		layer.msg("请选择删除的采购项");
+		return false;
+	}
+  layer.confirm('确定要删除选中的全部数据吗？', {
+		btn : [ '确定', '取消' ]
+	// 按钮
+	}, function() {
+		 $.ajax({  
+	   	     url:url,// 跳转到 action  
+	   	     data:JSON.stringify(_list),  
+	   	     type:'post',  
+	   	     cache:false,  
+	   	     dataType:'json', 
+	   	     contentType:"application/json",  //发送信息至服务器时内容编码类型。    
+	   	     success:function(data) {  
+	   	         if(data == 1){  
+	   	            window.location.reload();  
+	   	         }else{  
+	   	        	layer.msg('删除失败!',{icon:5,time:1000});
+	   	         }  
+	   	      },  
+	   	      error : function() {  
+	   	    	  layer.msg("异常！");  
+	   	      }  
+	        });
+	}, function() {
+
+	});
+}
+function changeState(url,toState){
+	var idArray = new Array();
+	//用来判断条件是否满足, 是否继续
+	var result = true;
+	//记录要提示的信息
+	var message = "";
+	$('input[name="id"]:checked').each(
+        function (i) {
+      	 	idArray[i] = $(this).val();
+      	 	//检查是否填写最终收购价格
+      	 	if($(this).next().next().text() == ""){
+      	 		message = $(this).val()+'号订单未填写最终收购价格, 是否继续？';
+      	 		result = false;
+      	 	}
+      	 	//检查是否填写质检价格
+	      	if($(this).next().text() == ""){
+				layer.msg('请填写'+$(this).val()+'号订单的最终质检价格!',{icon:5,time:1000});
+				result = false;
+			};
+     });
+	if(result==false && message == ""){
+		return;
+	}
+	if(result==false){
+		 layer.confirm(message, {
+			btn : [ '确定', '取消' ]
+		 // 按钮
+		 }, function() {
+			 if(idArray.length == 0){
+					layer.msg("请选择操作的质检项");
+					return false;
+				}
+				//传给服务器的参数对象, 包含id数组, 和目标状态code
+				var toServer = {
+					ids:idArray ,
+					state:toState
+				}
+				 $(function() {
+					 $.ajax({
+				  	     url:url,// 跳转到 action  
+				  	     data:JSON.stringify(toServer),
+				  	     type:'post',  
+				  	     cache:false,  
+				  	     dataType:'json', 
+				  	     contentType:"application/json",  //发送信息至服务器时内容编码类型。    
+				  	     success:function(data) {  
+				  	         if(data.code == "000000"){
+				  	        	layer.msg('操作成功!',{icon:1,time:2000});
+				  	        	setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+				  	        		window.location.reload();//页面刷新
+				  	        		},500);
+				  	         }else{
+				  	        	layer.msg('操作失败!',{icon:5,time:1000});
+				  	         }  
+				  	      },  
+				  	      error : function() {  
+				  	    	  layer.msg("异常！");  
+				  	      }  
+					   });
+				});
+		 }, function() {
+
+		 });
+	}else{
+		if(idArray.length == 0){
+			layer.msg("请选择操作的质检项");
+			return false;
+		}
+		//传给服务器的参数对象, 包含id数组, 和目标状态code
+		var toServer = {
+			ids:idArray ,
+			state:toState
+		}
+		 $(function() {
+			 $.ajax({
+		  	     url:url,// 跳转到 action  
+		  	     data:JSON.stringify(toServer),
+		  	     type:'post',  
+		  	     cache:false,  
+		  	     dataType:'json', 
+		  	     contentType:"application/json",  //发送信息至服务器时内容编码类型。    
+		  	     success:function(data) {  
+		  	         if(data.code == "000000"){
+		  	        	layer.msg('操作成功!',{icon:1,time:2000});
+		  	        	setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+		  	        		window.location.reload();//页面刷新
+		  	        		},500);
+		  	         }else{
+		  	        	layer.msg('操作失败!',{icon:5,time:1000});
+		  	         }  
+		  	      },  
+		  	      error : function() {  
+		  	    	  layer.msg("异常！");  
+		  	      }  
+			   });
+		});
+	}
+	
+}
+
+function changeState2(url,toState){
+	var idArray = new Array();
+	var result = true;
+	$('input[name="id"]:checked').each(
+	        function (i) {
+	      	 	idArray[i] = $(this).val();
+	     });
+	if(idArray.length == 0){
+		layer.msg("请选择操作的质检项");
+		return false;
+	}
+	//传给服务器的参数对象, 包含id数组, 和目标状态code
+	var toServer = {
+		ids:idArray ,
+		state:toState
+	}
+	 $(function() {
+		 $.ajax({
+	  	     url:url,// 跳转到 action  
+	  	     data:JSON.stringify(toServer),
+	  	     type:'post',  
+	  	     cache:false,  
+	  	     dataType:'json', 
+	  	     contentType:"application/json",  //发送信息至服务器时内容编码类型。    
+	  	     success:function(data) {  
+	  	         if(data.code == "000000"){
+	  	        	layer.msg('操作成功!',{icon:1,time:2000});
+	  	        	setTimeout(function(){  //使用  setTimeout（）方法设定定时2000毫秒
+	  	        		window.location.reload();//页面刷新
+	  	        		},500);
+	  	         }else{
+	  	        	layer.msg('操作失败!',{icon:5,time:1000});
+	  	         }  
+	  	      },  
+	  	      error : function() {  
+	  	    	  layer.msg("异常！");  
+	  	      }  
+		   });
+	});
+}
+
+
+$('#reset').on('click',function(){
+	$('.input-text').val("");
+	$('.text-input').prop('selectedIndex', 0);
+});
+</script>
+</body>
+</html>

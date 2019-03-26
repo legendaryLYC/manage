@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:include="_meta :: header">
+<title>采购登记 </title>
+</head>
+<body>
+<style>
+	#remarks{
+		height:5em;
+	}
+	select{
+		height:2.6em;
+		width:15em;
+		border: solid 1px #ddd;
+	}
+	#quotePrice{
+		font-zize:7em;
+		font-weight:700;
+		color:red;
+	}
+</style>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 精准报价 <span class="c-gray en">&gt;</span> 精准报价 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<article class="page-container">
+	<form class="form form-horizontal" id="form-purchase-updateOrder" action="#" th:action="@{/quoted/showFourPrice}">
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>品&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp牌：</label>
+		<div class="formControls col-xs-7 col-sm-8">
+		<select id= "brand" th:name="brand"  class="text-input" >
+		<option value="">待选择</option>
+		<option th:each="brand:${brandInfo}" th:text="${brand.name}" th:value="${brand.code}">空</option> 
+		</select> 
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>型&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp号：</label>
+		<div class="formControls col-xs-7 col-sm-8">
+	      <select id= "model" th:name="model" class="text-input" >
+		    <option value="">待选择</option>
+		    <!-- <option th:each="model:${modelInfo}" th:text="${model.name}" th:value="${model.code}">空</option>   -->
+		  </select>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>规&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp格：</label>
+		<div class="formControls col-xs-7 col-sm-8">
+		  <select id= "standard" th:name="standard" class="text-input" > 
+		    <option value="">待选择</option>
+		   <!--  <option th:each="standard:${standardInfo}" th:text="${standard.name}" th:value="${standard.code}">空</option>   -->
+		  </select>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>有&nbsp轻&nbsp微&nbsp划&nbsp痕：</label>
+		<div class="formControls col-xs-7 col-sm-8 skin-minimal">
+			<div class="radio-box">
+				<input name="scratch" value = '1' type="radio" id="scratchPriceTrue" />是  
+			</div>
+			<div class="radio-box">
+			    <input name="scratch" value = '-1' type="radio" id="scratchPriceFalse" checked="checked"/>否
+			</div>
+		</div>
+	</div>
+		<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>有&nbsp严&nbsp重&nbsp划&nbsp痕：</label>
+		<div class="formControls col-xs-7 col-sm-8 skin-minimal">
+			<div class="radio-box">
+				<input name="scratchTwo" value = '1' type="radio" id="scratchPriceTrue" />是  
+			</div>
+			<div class="radio-box">
+			    <input name="scratchTwo" value = '-1' type="radio" id="scratchPriceFalse" checked="checked" />否
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>有&nbsp轻&nbsp微&nbsp磕&nbsp碰：</label>
+		<div class="formControls col-xs-7 col-sm-8">
+		  <div class="radio-box">
+			<input name="knock"  value = '1' type="radio" id="knockPriceTrue" />是
+		  </div>
+			<div class="radio-box">
+			<input name="knock"  value = '-1' type="radio" id="knockPriceFalse" checked="checked" />否
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>有&nbsp严&nbsp重&nbsp磕&nbsp碰：</label>
+		<div class="formControls col-xs-7 col-sm-8">
+		  <div class="radio-box">
+			<input name="knockTwo"  value = '1' type="radio" id="knockPriceTrue" />是
+		  </div>
+			<div class="radio-box">
+			<input name="knockTwo"  value = '-1' type="radio" id="knockPriceFalse" checked="checked"/>否
+			</div>
+		</div>
+	</div>
+	<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>国外版本无锁：</label>
+		<div class="formControls col-xs-7 col-sm-8">
+		  <div class="radio-box">
+			<input name="nationLock"  value = '1' type="radio" id="knockPriceTrue" />是
+		  </div>
+			<div class="radio-box">
+			<input name="nationLock"  value = '-1' type="radio" id="knockPriceFalse" checked="checked"/>否
+			</div>
+		</div>
+	</div>
+		<div class="row cl">
+		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是&nbsp否&nbsp有&nbsp包&nbsp装：</label>
+		<div class="formControls col-xs-7 col-sm-8">
+		<div class="radio-box">
+			<input name="packing"  value = '1' type="radio" id="packingPriceTrue" />是
+			</div>
+		<div class="radio-box">
+			<input name="packing"  value = '-1' type="radio" id="packingPriceFalse" checked="checked" />否
+			</div>
+		</div>
+	</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是&nbsp否&nbsp有&nbsp配&nbsp件：</label>
+			<div class="formControls col-xs-7 col-sm-8">
+			<div class="radio-box">
+				<input name="attachment"  value = '1' type="radio" id="attachmentPriceTrue" />是 
+				</div>
+			<div class="radio-box">
+				<input name="attachment"  value = '-1' type="radio" id="attachmentPriceFalse" checked="checked"/>否
+				</div>
+		</div>
+	</div>
+			<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>是否在保修期：</label>
+			<div class="formControls col-xs-7 col-sm-8">
+			<div class="radio-box">
+				<input name="warranty"  value = '1' type="radio" id="attachmentPriceTrue" />是 
+				</div>
+			<div class="radio-box">
+				<input name="warranty"  value = '-1' type="radio" id="attachmentPriceFalse" checked="checked"\/>否
+				</div>
+		</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"></span>预&nbsp估&nbsp价&nbsp格：</label>
+			<div class="formControls col-xs-7 col-sm-8">
+			    <i class="Hui-iconfont">&#165;&nbsp&nbsp</i>
+				<span type="text" name="quotePrice" id="quotePrice"/>0<span>
+			</div>
+		</div>
+		<div class="row cl">
+		<div class="col-xs-3 col-sm-3 col-xs-offset-4 col-sm-offset-3">
+			<input class="btn btn-primary radius"  id="subbtn" type="submit" value="&nbsp;&nbsp;计算&nbsp;&nbsp;"/>
+			<input class="btn radius" style = " margin-left:30px;"id="reset" type="button" value="&nbsp;&nbsp;重置&nbsp;&nbsp;"/>
+		</div> 
+	</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去--> 
+<div th:replace="_footer :: footerjs"></div>
+ <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.js}" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.js}"  src="lib/jquery.validation/1.14.0/messages_zh.js"></script> 
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"  src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript">
+
+var result;
+//选择品牌事件
+$("#brand").change(function() {
+	//先清空型号
+	$("#model").empty();
+	$("#standard").empty();
+	$('#model').append("<option value=''>待选择</option>");
+	$('#standard').append("<option value=''>待选择</option>");
+	if($("#brand").val()==""){
+		//啥都不做
+	}else{
+		chooseDic("brand",$("#brand").val(),0);
+		for (i in result){
+			$('#model').append("<option value='"+result[i].model+"'>"+result[i].modelname+"</option>");
+		}
+	}
+});
+//选择型号事件
+$("#model").change(function() {
+	//先清空规格
+	$("#standard").empty();
+	$('#standard').append("<option value=''>待选择</option>");
+	if($("#model").val()==""){
+		//啥都不做
+	}else{
+		chooseDic("model",$("#brand").val(),$("#model").val());
+		for (i in result){
+			$('#standard').append("<option value='"+result[i].standard+"'>"+result[i].standardname+"</option>");
+		}
+	}
+});
+//选择下拉菜单时和后台要字典的交互方法
+function chooseDic(who,code1,code2){
+	var toServer={
+		who : who,
+		code1 : code1,
+		code2 : code2
+	}
+	//此处请求后台程序，下方是成功后的前台处理……
+	$.ajax({
+		type: 'POST',
+		url: "/quoted/getThree",
+		dataType: 'json',
+		data:toServer,
+		async:false,
+		success: function(data){
+			//返回服务器返回的字典对象
+			result = data;
+		},
+		error:function(data) {
+			console.log(data.msg);
+		},
+	});
+}
+
+
+
+
+ $(function(){
+	$("#form-purchase-updateOrder").validate({
+			rules:{
+				brand:{
+					required:true,
+				},
+				model:{
+					required:true,
+				},
+				standard:{
+					required:true,
+				},
+			},
+		onkeyup:false,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				type: 'POST',
+				url: "/quoted/showFourPrice" ,
+				success: function(data){
+					if(data !="" ){
+						//禁止重复提交
+						layer.msg('计算成功!',{icon:1,time:1000},function(){
+							$('#quotePrice').text(data);
+						});
+					}else if(data == -1){
+						layer.msg('计算失败!请重试',{icon:1,time:1000});
+					}else{
+						layer.msg('库中没有该类型的手机，无法计算价格!',{icon:1,time:1000});
+					}
+				},
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+					layer.msg('请检查选择信息！',{icon:1,time:1000});
+				}
+			});
+		}
+	});
+}); 
+
+//自定义validate验证输入的数字小数点位数不能大于两位
+jQuery.validator.addMethod("minNumber",function(value, element){
+    var returnVal = true;
+    inputZ=value;
+    var ArrMen= inputZ.split(".");    //截取字符串
+    if(ArrMen.length==2){
+        if(ArrMen[1].length>2){    //判断小数点后面的字符串长度
+            returnVal = false;
+            return false;
+        }
+    }
+    return returnVal;
+},"小数点后最多为两位");         //验证错误信息
+
+//重置按钮
+$('#reset').on('click',function(){
+	$('.input-text').val("");
+	$('.text-input').prop('selectedIndex', 0);
+	$('#quotePrice').text("");
+});
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

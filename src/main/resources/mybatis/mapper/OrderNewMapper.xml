@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.OrderNewMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.OrderNew" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="num" property="num" jdbcType="VARCHAR" />
+    <result column="date" property="date" jdbcType="DATE" />
+    <result column="model" property="model" jdbcType="VARCHAR" />
+    <result column="color" property="color" jdbcType="VARCHAR" />
+    <result column="version" property="version" jdbcType="VARCHAR" />
+    <result column="memory" property="memory" jdbcType="VARCHAR" />
+    <result column="seller" property="seller" jdbcType="VARCHAR" />
+    <result column="express" property="express" jdbcType="VARCHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="purchase_express" property="purchaseExpress" jdbcType="DECIMAL" />
+    <result column="repair_price" property="repairPrice" jdbcType="DECIMAL" />
+    <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+    <result column="sell_express" property="sellExpress" jdbcType="DECIMAL" />
+    <result column="profit" property="profit" jdbcType="DECIMAL" />
+    <result column="buyer" property="buyer" jdbcType="VARCHAR" />
+    <result column="sell_number" property="sellNumber" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user" property="user" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, num, date, model, color, version, memory,seller, express, purchase_price, purchase_express,
+    repair_price, sell_price, sell_express, profit, buyer, sell_number, state, remark, 
+    user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_new
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from order_new
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xiongantaoli.background.entity.OrderNew" >
+    insert into order_new (id, num, date, model, 
+      color, version,memory,seller,
+      express, purchase_price, purchase_express, 
+      repair_price, sell_price, sell_express, 
+      profit, buyer, sell_number, 
+      state, remark, user
+      )
+    values (#{id,jdbcType=BIGINT}, #{num,jdbcType=VARCHAR}, #{date,jdbcType=DATE}, #{model,jdbcType=VARCHAR},
+      #{color,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, #{memory,jdbcType=VARCHAR},#{seller,jdbcType=VARCHAR},
+      #{express,jdbcType=VARCHAR}, #{purchasePrice,jdbcType=DECIMAL}, #{purchaseExpress,jdbcType=DECIMAL}, 
+      #{repairPrice,jdbcType=DECIMAL}, #{sellPrice,jdbcType=DECIMAL}, #{sellExpress,jdbcType=DECIMAL}, 
+      #{profit,jdbcType=DECIMAL}, #{buyer,jdbcType=VARCHAR}, #{sellNumber,jdbcType=VARCHAR}, 
+      #{state,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{user,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.OrderNew" >
+    insert into order_new
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="date != null" >
+        date,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="version != null" >
+        version,
+      </if>
+      <if test="memory != null" >
+        memory,
+      </if>
+      <if test="seller != null" >
+        seller,
+      </if>
+      <if test="express != null" >
+        express,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="purchaseExpress != null" >
+        purchase_express,
+      </if>
+      <if test="repairPrice != null" >
+        repair_price,
+      </if>
+      <if test="sellPrice != null" >
+        sell_price,
+      </if>
+      <if test="sellExpress != null" >
+        sell_express,
+      </if>
+      <if test="profit != null" >
+        profit,
+      </if>
+      <if test="buyer != null" >
+        buyer,
+      </if>
+      <if test="sellNumber != null" >
+        sell_number,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        #{date,jdbcType=DATE},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="memory != null" >
+        #{memory,jdbcType=VARCHAR},
+      </if>
+      <if test="seller != null" >
+        #{seller,jdbcType=VARCHAR},
+      </if>
+      <if test="express != null" >
+        #{express,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="purchaseExpress != null" >
+        #{purchaseExpress,jdbcType=DECIMAL},
+      </if>
+      <if test="repairPrice != null" >
+        #{repairPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sellPrice != null" >
+        #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sellExpress != null" >
+        #{sellExpress,jdbcType=DECIMAL},
+      </if>
+      <if test="profit != null" >
+        #{profit,jdbcType=DECIMAL},
+      </if>
+      <if test="buyer != null" >
+        #{buyer,jdbcType=VARCHAR},
+      </if>
+      <if test="sellNumber != null" >
+        #{sellNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.OrderNew" >
+    update order_new
+    <set >
+      <if test="num != null" >
+        num = #{num,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null" >
+        date = #{date,jdbcType=DATE},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null" >
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="memory != null" >
+        memory = #{memory,jdbcType=VARCHAR},
+      </if>
+      <if test="seller != null" >
+        seller = #{seller,jdbcType=VARCHAR},
+      </if>
+      <if test="express != null" >
+        express = #{express,jdbcType=VARCHAR},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="purchaseExpress != null" >
+        purchase_express = #{purchaseExpress,jdbcType=DECIMAL},
+      </if>
+      <if test="repairPrice != null" >
+        repair_price = #{repairPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sellPrice != null" >
+        sell_price = #{sellPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sellExpress != null" >
+        sell_express = #{sellExpress,jdbcType=DECIMAL},
+      </if>
+      <if test="profit != null" >
+        profit = #{profit,jdbcType=DECIMAL},
+      </if>
+      <if test="buyer != null" >
+        buyer = #{buyer,jdbcType=VARCHAR},
+      </if>
+      <if test="sellNumber != null" >
+        sell_number = #{sellNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        user = #{user,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.OrderNew" >
+    update order_new
+    set num = #{num,jdbcType=VARCHAR},
+      date = #{date,jdbcType=DATE},
+      model = #{model,jdbcType=VARCHAR},
+      color = #{color,jdbcType=VARCHAR},
+      version = #{version,jdbcType=VARCHAR},
+      memory = #{memory,jdbcType=VARCHAR},
+      seller = #{seller,jdbcType=VARCHAR},
+      express = #{express,jdbcType=VARCHAR},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      purchase_express = #{purchaseExpress,jdbcType=DECIMAL},
+      repair_price = #{repairPrice,jdbcType=DECIMAL},
+      sell_price = #{sellPrice,jdbcType=DECIMAL},
+      sell_express = #{sellExpress,jdbcType=DECIMAL},
+      profit = #{profit,jdbcType=DECIMAL},
+      buyer = #{buyer,jdbcType=VARCHAR},
+      sell_number = #{sellNumber,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      user = #{user,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="selectOrder" resultMap="BaseResultMap" parameterType="com.xiongantaoli.background.form.NewOrderForm" >
+    select
+    <include refid="Base_Column_List" />
+    from order_new
+    where 1 = 1
+    <if test="num != null and num !=''" >
+     and num = #{num,jdbcType=VARCHAR}
+    </if>
+    <if test="seller != null and seller != ''" >
+     and seller like  '%${seller}%'
+    </if>
+    <if test="express != null and express != ''" >
+     and express like  '%${express}%'
+    </if>
+    <if test="buyer != null and buyer != ''" >
+     and buyer like  '%${buyer}%'
+    </if>
+    <if test="sellNumber != null and sellNumber != ''" >
+     and sellNumber like '%${sellNumber}%'
+    </if>
+    <if test="state != null and state != ''" >
+     and state like  '%${state}%'
+    </if>
+    <if test="beginTime != null and beginTime != '' " >
+      and date <![CDATA[>=]]> #{beginTime}
+    </if>
+    <if test="endTime != null and endTime != '' " >
+      and date <![CDATA[<=]]> #{endTime}
+    </if>
+    <if test="endTime != null and endTime != '' " >
+      and date <![CDATA[<=]]> #{endTime}
+    </if>
+    <if test="user != null and user != '' " >
+      and user like  '%${user}%'
+    </if>
+  </select>
+  <select id="selcetAllOrder" resultMap="BaseResultMap"  >
+  select
+  <include refid="Base_Column_List" />
+  from order_new
+  </select>
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.MaterielMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.Materiel" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="INTEGER" />
+    <result column="materiel_name" property="materielName" jdbcType="VARCHAR" />
+    <result column="materiel_price" property="materielPrice" jdbcType="DECIMAL" />
+    <result column="materiel_num" property="materielNum" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, materiel_name, materiel_price, materiel_num
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from materiel
+    where code = #{0}
+  </select>
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 
+    <include refid="Base_Column_List" />
+    from materiel
+    where 1 = 1
+    <if test="_parameter != null ">
+        and materiel_name like "%"#{0}"%"
+    </if>
+  </select>
+    <select id="selectByName" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 
+    <include refid="Base_Column_List" />
+    from materiel
+    where 1 = 1
+    <if test="_parameter != null ">
+        and materiel_name  = #{0}
+    </if>
+  </select>
+  <select id="getCount" resultType="long">
+    select 
+    count(*)
+    from materiel
+  </select>
+  <select id="selectLast" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from materiel
+    order by id DESC limit 1
+  </select>  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from materiel
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByCode" parameterType="java.lang.Integer" >
+    delete from materiel
+    where code = #{code,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="com.xiongantaoli.background.entity.Materiel" >
+    insert into materiel (id, code, materiel_name, 
+      materiel_price, materiel_num)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=INTEGER}, #{materielName,jdbcType=VARCHAR}, 
+      #{materielPrice,jdbcType=DECIMAL}, #{materielNum,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.Materiel" >
+    insert into materiel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="materielName != null" >
+        materiel_name,
+      </if>
+      <if test="materielPrice != null" >
+        materiel_price,
+      </if>
+      <if test="materielNum != null" >
+        materiel_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=INTEGER},
+      </if>
+      <if test="materielName != null" >
+        #{materielName,jdbcType=VARCHAR},
+      </if>
+      <if test="materielPrice != null" >
+        #{materielPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materielNum != null" >
+        #{materielNum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.Materiel" >
+    update materiel
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=INTEGER},
+      </if>
+      <if test="materielName != null" >
+        materiel_name = #{materielName,jdbcType=VARCHAR},
+      </if>
+      <if test="materielPrice != null" >
+        materiel_price = #{materielPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materielNum != null" >
+        materiel_num = #{materielNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.Materiel" >
+    update materiel
+    set code = #{code,jdbcType=INTEGER},
+      materiel_name = #{materielName,jdbcType=VARCHAR},
+      materiel_price = #{materielPrice,jdbcType=DECIMAL},
+      materiel_num = #{materielNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByCode" parameterType="com.xiongantaoli.background.entity.Materiel" >
+    update materiel
+    <set >
+      <if test="materielName != null" >
+        materiel_name = #{materielName,jdbcType=VARCHAR},
+      </if>
+      <if test="materielPrice != null" >
+        materiel_price = #{materielPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="materielNum != null" >
+        materiel_num = #{materielNum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where code = #{code,jdbcType=INTEGER}
+  </update>
+</mapper>

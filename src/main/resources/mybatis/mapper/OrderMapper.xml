@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.Order" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="color" property="color" jdbcType="INTEGER" />
+    <result column="order_num" property="orderNum" jdbcType="VARCHAR" />
+    <result column="purchase_method" property="purchaseMethod" jdbcType="INTEGER" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="purchase_time" property="purchaseTime" jdbcType="DATE" />
+    <result column="final_time" property="finalTime" jdbcType="DATE" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="guarantee" property="guarantee" jdbcType="INTEGER" />
+    <result column="apperance" property="apperance" jdbcType="VARCHAR" />
+    <result column="random_attachment" property="randomAttachment" jdbcType="VARCHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="final_purchase" property="finalPurchase" jdbcType="DECIMAL" />
+    <result column="quality_price" property="qualityPrice" jdbcType="DECIMAL" />
+    <result column="part_price" property="partPrice" jdbcType="DECIMAL" />
+    <result column="pur_remarks" property="purRemarks" jdbcType="VARCHAR" />
+    <result column="qu_remark" property="quRemark" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="AllResultMap" type="com.xiongantaoli.background.form.OrderInfoForm" >
+    <id column="orderListId" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="order_num" property="orderNum" jdbcType="VARCHAR" />
+    <result column="purchase_method" property="purchaseMethod" jdbcType="INTEGER" />
+    <result column="color" property="color" jdbcType="INTEGER" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="purchase_time" property="purchaseTime" jdbcType="DATE" />
+    <result column="final_time" property="finalTime" jdbcType="DATE" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="random_attachment" property="randomAttachment" jdbcType="VARCHAR" />
+    <result column="guarantee" property="guarantee" jdbcType="INTEGER" />
+    <result column="apperance" property="apperance" jdbcType="VARCHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="final_purchase" property="finalPurchase" jdbcType="DECIMAL" />
+    <result column="quality_price" property="qualityPrice" jdbcType="DECIMAL" />
+    <result column="part_price" property="partPrice" jdbcType="DECIMAL" />
+    <result column="pur_remarks" property="purRemarks" jdbcType="VARCHAR" />
+    <result column="qu_remark" property="quRemark" jdbcType="VARCHAR" />
+	
+	<result column="productInfoId" property="productInfoId" jdbcType="INTEGER" />
+    <result column="productInfoBrand" property="productInfoBrand" jdbcType="INTEGER" />
+	<result column="productInfoModel" property="productInfoModel" jdbcType="INTEGER" />
+    <result column="productInfoStandrad" property="productInfoStandrad" jdbcType="INTEGER" />
+	
+	<result column="productStandardCode" property="productStandradCode" jdbcType="INTEGER" />
+    <result column="productStandardName" property="productStandradName" jdbcType="VARCHAR" />
+    <result column="dicMethodCode" property="dicMethodCode" jdbcType="INTEGER" />
+    <result column="dicMethodName" property="dicMethodName" jdbcType="VARCHAR" />
+    <result column="productBrandCode" property="productBrandCode" jdbcType="INTEGER" />
+    <result column="productBrandName" property="productBrandName" jdbcType="VARCHAR" />
+    <result column="productModelCode" property="productModelCode" jdbcType="INTEGER" />
+    <result column="productModelName" property="productModelName" jdbcType="VARCHAR" />
+    <result column="productColorCode" property="productColorCode" jdbcType="INTEGER" />
+    <result column="productColorName" property="productColorName" jdbcType="VARCHAR" />
+    <result column="productGuaranteeCode" property="productGuaranteeCode" jdbcType="INTEGER" />
+    <result column="productGuaranteeName" property="productGuaranteeName" jdbcType="VARCHAR" />
+    <result column="productStateCode" property="productStateCode" jdbcType="INTEGER" />
+    <result column="productStateName" property="productStateName" jdbcType="VARCHAR" />
+    
+    <result column="soldOutUserId" property="soldOutUserId" jdbcType="BIGINT" />
+    <result column="soldOutPurchaseId" property="soldOutPurchaseId" jdbcType="BIGINT" />
+    <result column="soldOutLogisicsNum" property="soldOutLogisicsNum" jdbcType="VARCHAR" />
+    <result column="soldOutLogisicsNumCompany" property="soldOutLogisicsNumCompany" jdbcType="VARCHAR" />
+    <result column="soldOutCarriagePrice" property="soldOutCarriagePrice" jdbcType="DECIMAL" />
+    <result column="soldOutSalesPerson" property="soldOutSalesPerson" jdbcType="VARCHAR" />
+    <result column="soldOutTime" property="soldOutTime" jdbcType="DATE" />
+    
+    <result column="drawBackUserId" property="drawBackUserId" jdbcType="BIGINT" />
+    <result column="drawBackPurchaseId" property="drawBackPurchaseId" jdbcType="BIGINT" />
+    <result column="drawBackLogisticsNum" property="drawBackLogisticsNum" jdbcType="VARCHAR" />
+    <result column="drawBackLogisticsCompany" property="drawBackLogisticsCompany" jdbcType="VARCHAR" />
+    <result column="drawBackCarriagePrice" property="drawBackCarriagePrice" jdbcType="DECIMAL" />
+    <result column="drawBackTime" property="drawBackTime" jdbcType="DATE" />
+    
+  </resultMap>
+  <resultMap id="BaseResultMap2" type="com.xiongantaoli.background.entity.OrderForm" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="product_id" property="productId" jdbcType="BIGINT" />
+    <result column="order_num" property="orderNum" jdbcType="VARCHAR" />
+    <result column="purchase_method" property="purchaseMethod" jdbcType="INTEGER" />
+    <result column="brand" property="brand" jdbcType="INTEGER" />
+    <result column="model" property="model" jdbcType="INTEGER" />
+    <result column="color" property="color" jdbcType="INTEGER" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="purchase_time" property="purchaseTime" jdbcType="DATE" />
+    <result column="final_time" property="finalTime" jdbcType="DATE" />
+    <result column="customer_name" property="customerName" jdbcType="VARCHAR" />
+    <result column="serial_num" property="serialNum" jdbcType="VARCHAR" />
+    <result column="guarantee" property="guarantee" jdbcType="INTEGER" />
+    <result column="apperance" property="apperance" jdbcType="VARCHAR" />
+    <result column="random_attachment" property="randomAttachment" jdbcType="VARCHAR" />
+    <result column="purchase_price" property="purchasePrice" jdbcType="DECIMAL" />
+    <result column="final_purchase" property="finalPurchase" jdbcType="DECIMAL" />
+    <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="name" property="brandName" jdbcType="VARCHAR" />
+    <result column="name" property="colorName" jdbcType="VARCHAR" />
+    <result column="name" property="modelName" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, product_id, color, order_num, purchase_method, order_state, operator, 
+    purchase_time, final_time, customer_name, serial_num, guarantee, apperance, random_attachment, 
+    purchase_price, final_purchase, quality_price, part_price, pur_remarks, qu_remark
+  </sql>
+  <sql id="All_Column_List" >
+   	order_list.id AS orderListId,
+	order_list.user_id,
+	order_list.product_id,
+	order_list.color,
+	order_list.order_num,
+	order_list.purchase_method,
+	order_list.order_state,
+	order_list.operator,
+	order_list.purchase_time,
+	order_list.final_time,
+	order_list.customer_name,
+	order_list.serial_num,
+	order_list.guarantee,
+	order_list.apperance,
+	order_list.random_attachment,
+	order_list.purchase_price,
+	order_list.final_purchase,
+	order_list.quality_price,
+	order_list.part_price,
+	order_list.pur_remarks,
+	order_list.qu_remark,
+	product_model.`code` AS productModelCode,
+	product_model.`name` AS productModelName,
+	product_standard.`code` AS productStandardCode,
+	product_standard.`name` AS productStandardName,
+	product_brand.`code` AS productBrandCode,
+	product_brand.`name` AS productBrandName,
+	product_color.`name` AS productColorName,
+	product_guarantee.`code` AS productGuaranteeCode,
+	product_guarantee.`name` AS productGuaranteeName,
+	product_state.`name` AS productStateName,
+	product_state.`code` AS productStateCode,
+	product_method.`code` AS dicMethodCode,
+	product_method.name AS dicMethodName,
+	product_info.id AS productInfoId,
+	product_info.brand AS productInfoBrand,
+	product_info.model AS productInfoModel,
+	product_info.standard AS productInfoStandrad,
+	product_color.`code` AS productColorCode,
+	
+	sold_out.user_id AS soldOutUserId,
+	sold_out.purchase_id AS soldOutPurchaseId,
+	sold_out.logistics_num AS soldOutLogisicsNum,
+	sold_out.logistics_company AS soldOutLogisicsNumCompany,
+	sold_out.carriage_price AS soldOutCarriagePrice,
+	sold_out.sales_person AS soldOutSalesPerson,
+	sold_out.time AS soldOutTime,
+	drawback_list.user_id AS drawBackUserId,
+	drawback_list.purchase_id AS drawBackPurchaseId,
+	drawback_list.logistics_num AS drawBackLogisticsNum,
+	drawback_list.logistics_company AS drawBackLogisticsCompany,
+	drawback_list.carriage_price AS drawBackCarriagePrice,
+	drawback_list.time AS drawBackTime
+  </sql>
+    <select id="selectOrderAll" resultMap="AllResultMap" parameterType="com.xiongantaoli.background.entity.Order" >
+    select 
+    <include refid="All_Column_List" />
+    from order_list
+	LEFT JOIN product_method ON product_method.`code` = order_list.purchase_method
+	LEFT JOIN product_color ON product_color.`code` = order_list.color
+	LEFT JOIN product_guarantee ON product_guarantee.`code` = order_list.guarantee
+	LEFT JOIN product_info ON order_list.product_id = product_info.id
+	LEFT JOIN product_model ON product_info.model = product_model.`code`
+	LEFT JOIN product_standard ON product_info.standard = product_standard.`code`
+	LEFT JOIN product_state ON product_state.`code` = order_list.order_state
+	LEFT JOIN product_brand ON product_brand.`code` = product_info.brand
+	LEFT JOIN sold_out ON order_list.id = sold_out.purchase_id
+	LEFT JOIN drawback_list ON order_list.id = drawback_list.purchase_id
+	 <where>
+		<if test="orderNum != null " >
+	        order_num like "%"#{orderNum,jdbcType=VARCHAR}"%"
+	    </if>
+	    <if test="operator != null " >
+	        and operator like "%"#{operator,jdbcType=VARCHAR}"%"
+	    </if>
+	    <if test="serialNum != null" >
+	        and serial_num like "%"#{serialNum,jdbcType=VARCHAR}"%"
+	    </if>
+
+	</where>
+  </select>
+  
+  <select id="selectOderInfoFormsSelective" resultMap="AllResultMap" parameterType="com.xiongantaoli.background.entity.Order" >
+    select 
+    <include refid="All_Column_List" />
+    from order_list
+	LEFT JOIN product_method ON product_method.`code` = order_list.purchase_method
+	LEFT JOIN product_color ON product_color.`code` = order_list.color
+	LEFT JOIN product_guarantee ON product_guarantee.`code` = order_list.guarantee
+	LEFT JOIN product_info ON order_list.product_id = product_info.id
+	LEFT JOIN product_model ON product_info.model = product_model.`code`
+	LEFT JOIN product_standard ON product_info.standard = product_standard.`code`
+	LEFT JOIN product_state ON product_state.`code` = order_list.order_state
+	LEFT JOIN product_brand ON product_brand.`code` = product_info.brand
+	LEFT JOIN sold_out ON order_list.id = sold_out.purchase_id
+	LEFT JOIN drawback_list ON order_list.id = drawback_list.purchase_id
+    <where>
+		<if test="orderNum != null " >
+	        order_num like "%"#{orderNum,jdbcType=VARCHAR}"%"
+	    </if>
+	    <if test="operator != null " >
+	        and operator like "%"#{operator,jdbcType=VARCHAR}"%"
+	    </if>
+	    <if test="purchaseTime != null" >
+	        and purchase_time = #{purchaseTime,jdbcType=DATE}
+	    </if>
+	    <if test="orderState != null" >
+	        and order_state = #{orderState,jdbcType=VARCHAR}
+	    </if>
+	    <if test="serialNum != null" >
+	        and serial_num like "%"#{serialNum,jdbcType=VARCHAR}"%"
+	    </if>
+	</where>
+  </select>
+  <select id="selectOrdersByStatesSelective" resultMap="AllResultMap" >
+    select 
+    <include refid="All_Column_List" />
+    from order_list
+	LEFT JOIN product_method ON product_method.`code` = order_list.purchase_method
+	LEFT JOIN product_color ON product_color.`code` = order_list.color
+	LEFT JOIN product_guarantee ON product_guarantee.`code` = order_list.guarantee
+	LEFT JOIN product_info ON order_list.product_id = product_info.id
+	LEFT JOIN product_model ON product_info.model = product_model.`code`
+	LEFT JOIN product_standard ON product_info.standard = product_standard.`code`
+	LEFT JOIN product_state ON product_state.`code` = order_list.order_state
+	LEFT JOIN product_brand ON product_brand.`code` = product_info.brand
+	LEFT JOIN sold_out ON order_list.id = sold_out.purchase_id
+	LEFT JOIN drawback_list ON order_list.id = drawback_list.purchase_id
+    <where>
+    	<if test="order.orderNum != null " >
+	        order_num like "%"#{order.orderNum,jdbcType=VARCHAR}"%"
+	    </if>
+	    <if test="order.operator != null " >
+	        and operator like "%"#{order.operator,jdbcType=VARCHAR}"%"
+	    </if>
+	    <if test="order.purchaseTime != null" >
+	        and purchase_time = #{order.purchaseTime,jdbcType=DATE}
+	    </if>
+	    <if test="order.orderState != null" >
+	        and order_state = #{order.orderState,jdbcType=VARCHAR}
+	    </if>
+	    <if test="order.serialNum != null" >
+	        and serial_num like "%"#{order.serialNum,jdbcType=VARCHAR}"%"
+	    </if>
+	   	<if test="order.id != null" >
+	        and order_list.id = #{order.id,jdbcType=BIGINT}
+	    </if>
+		<if test="states != null and states.length >0">
+			<foreach collection="states" item="state" separator="," open=" and order_state in (" close=")">
+				#{state,jdbcType=BIGINT}
+			</foreach>
+		</if>
+	</where>
+  </select>
+
+  <select id="selectOderInfoFormByPrimaryKey" resultMap="AllResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="All_Column_List" />
+    FROM order_list
+	LEFT JOIN product_method ON product_method.`code` = order_list.purchase_method
+	LEFT JOIN product_color ON product_color.`code` = order_list.color
+	LEFT JOIN product_guarantee ON product_guarantee.`code` = order_list.guarantee
+	LEFT JOIN product_info ON order_list.product_id = product_info.id
+	LEFT JOIN product_model ON product_info.model = product_model.`code`
+	LEFT JOIN product_standard ON product_info.standard = product_standard.`code`
+	LEFT JOIN product_state ON product_state.`code` = order_list.order_state
+	LEFT JOIN product_brand ON product_brand.`code` = product_info.brand
+	LEFT JOIN sold_out ON order_list.id = sold_out.purchase_id
+	LEFT JOIN drawback_list ON order_list.id = drawback_list.purchase_id
+	where order_list.id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_list
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from order_list
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xiongantaoli.background.entity.Order" >
+    insert into order_list (id, user_id, product_id, 
+      color, order_num, purchase_method, 
+      order_state, operator, purchase_time, 
+      final_time, customer_name, serial_num, 
+      guarantee, apperance, random_attachment, 
+      purchase_price, final_purchase, quality_price, 
+      part_price, pur_remarks, qu_remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
+      #{color,jdbcType=INTEGER}, #{orderNum,jdbcType=VARCHAR}, #{purchaseMethod,jdbcType=VARCHAR}, 
+      #{orderState,jdbcType=INTEGER}, #{operator,jdbcType=VARCHAR}, #{purchaseTime,jdbcType=DATE}, 
+      #{finalTime,jdbcType=DATE}, #{customerName,jdbcType=VARCHAR}, #{serialNum,jdbcType=VARCHAR}, 
+      #{guarantee,jdbcType=INTEGER}, #{apperance,jdbcType=VARCHAR}, #{randomAttachment,jdbcType=INTEGER}, 
+      #{purchasePrice,jdbcType=DECIMAL}, #{finalPurchase,jdbcType=DECIMAL}, #{qualityPrice,jdbcType=DECIMAL}, 
+      #{partPrice,jdbcType=DECIMAL}, #{purRemarks,jdbcType=VARCHAR}, #{quRemark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xiongantaoli.background.entity.Order" >
+    insert into order_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="color != null" >
+        color,
+      </if>
+      <if test="orderNum != null" >
+        order_num,
+      </if>
+      <if test="purchaseMethod != null" >
+        purchase_method,
+      </if>
+      <if test="orderState != null" >
+        order_state,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="purchaseTime != null" >
+        purchase_time,
+      </if>
+      <if test="finalTime != null" >
+        final_time,
+      </if>
+      <if test="customerName != null" >
+        customer_name,
+      </if>
+      <if test="serialNum != null" >
+        serial_num,
+      </if>
+      <if test="guarantee != null" >
+        guarantee,
+      </if>
+      <if test="apperance != null" >
+        apperance,
+      </if>
+      <if test="randomAttachment != null" >
+        random_attachment,
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price,
+      </if>
+      <if test="finalPurchase != null" >
+        final_purchase,
+      </if>
+      <if test="qualityPrice != null" >
+        quality_price,
+      </if>
+      <if test="partPrice != null" >
+        part_price,
+      </if>
+      <if test="purRemarks != null" >
+        pur_remarks,
+      </if>
+      <if test="quRemark != null" >
+        qu_remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null" >
+        #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseMethod != null" >
+        #{purchaseMethod,jdbcType=INTEGER},
+      </if>
+      <if test="orderState != null" >
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseTime != null" >
+        #{purchaseTime,jdbcType=DATE},
+      </if>
+      <if test="finalTime != null" >
+        #{finalTime,jdbcType=DATE},
+      </if>
+      <if test="customerName != null" >
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="guarantee != null" >
+        #{guarantee,jdbcType=INTEGER},
+      </if>
+      <if test="apperance != null" >
+        #{apperance,jdbcType=VARCHAR},
+      </if>
+      <if test="randomAttachment != null" >
+        #{randomAttachment,jdbcType=INTEGER},
+      </if>
+      <if test="purchasePrice != null" >
+        #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="finalPurchase != null" >
+        #{finalPurchase,jdbcType=DECIMAL},
+      </if>
+      <if test="qualityPrice != null" >
+        #{qualityPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="partPrice != null" >
+        #{partPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="purRemarks != null" >
+        #{purRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="quRemark != null" >
+        #{quRemark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.Order" >
+    update order_list
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=BIGINT},
+      </if>
+      <if test="color != null" >
+        color = #{color,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null" >
+        order_num = #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseMethod != null" >
+        purchase_method = #{purchaseMethod,jdbcType=INTEGER},
+      </if>
+      <if test="orderState != null" >
+        order_state = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseTime != null" >
+        purchase_time = #{purchaseTime,jdbcType=DATE},
+      </if>
+      <if test="finalTime != null" >
+        final_time = #{finalTime,jdbcType=DATE},
+      </if>
+      <if test="customerName != null" >
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNum != null" >
+        serial_num = #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="guarantee != null" >
+        guarantee = #{guarantee,jdbcType=INTEGER},
+      </if>
+      <if test="apperance != null" >
+        apperance = #{apperance,jdbcType=VARCHAR},
+      </if>
+      <if test="randomAttachment != null" >
+        random_attachment = #{randomAttachment,jdbcType=INTEGER},
+      </if>
+      <if test="purchasePrice != null" >
+        purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="finalPurchase != null" >
+        final_purchase = #{finalPurchase,jdbcType=DECIMAL},
+      </if>
+      <if test="qualityPrice != null" >
+        quality_price = #{qualityPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="partPrice != null" >
+        part_price = #{partPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="purRemarks != null" >
+        pur_remarks = #{purRemarks,jdbcType=VARCHAR},
+      </if>
+      <if test="quRemark != null" >
+        qu_remark = #{quRemark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateState">
+    update order_list
+    set order_state = #{state}
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.Order" >
+    update order_list
+    set user_id = #{userId,jdbcType=BIGINT},
+      product_id = #{productId,jdbcType=BIGINT},
+      color = #{color,jdbcType=INTEGER},
+      order_num = #{orderNum,jdbcType=VARCHAR},
+      purchase_method = #{purchaseMethod,jdbcType=VARCHAR},
+      order_state = #{orderState,jdbcType=INTEGER},
+      operator = #{operator,jdbcType=VARCHAR},
+      purchase_time = #{purchaseTime,jdbcType=DATE},
+      final_time = #{finalTime,jdbcType=DATE},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      serial_num = #{serialNum,jdbcType=VARCHAR},
+      guarantee = #{guarantee,jdbcType=INTEGER},
+      apperance = #{apperance,jdbcType=VARCHAR},
+      random_attachment = #{randomAttachment,jdbcType=INTEGER},
+      purchase_price = #{purchasePrice,jdbcType=DECIMAL},
+      final_purchase = #{finalPurchase,jdbcType=DECIMAL},
+      quality_price = #{qualityPrice,jdbcType=DECIMAL},
+      part_price = #{partPrice,jdbcType=DECIMAL},
+      pur_remarks = #{purRemarks,jdbcType=VARCHAR},
+      qu_remark = #{quRemark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectAll" resultMap="BaseResultMap" >
+   	SELECT
+   	product_id,
+	final_purchase,
+	purchase_price,
+	order_state
+	FROM
+	order_list where 1 = 1
+	 <if test="beginTime != null and beginTime != '' " >
+   		and purchase_time <![CDATA[>=]]> #{beginTime}
+   	</if>
+   	<if test="endTime != null and endTime != '' " >
+   		and purchase_time <![CDATA[<=]]> #{endTime}
+   	</if>
+   	
+  </select>
+</mapper>

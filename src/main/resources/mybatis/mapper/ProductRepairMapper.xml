@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.ProductRepairMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.ProductRepair" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="code" property="code" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, code, name, price
+  </sql> 
+  <!-- 查询所有 -->
+   <select id="selectAll" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from product_repair
+  </select>
+   <!-- 根据code查询所有信息 -->
+   <select id="selectByCode" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from product_repair
+    where code = #{code,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_repair
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <!-- 如果name值为空查询所有，如果name不为空则查询指定 -->
+  
+  <select id="select" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	select 
+    <include refid="Base_Column_List" />
+    from product_repair
+    where 1 = 1
+    <if test="_parameter != null ">
+        and name like "%"#{0}"%"
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from product_repair
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <!-- 根据id删除选中信息 -->
+  <delete id="deletebyid" parameterType="java.lang.Long" >
+    delete from product_repair
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insertproductRepair">
+   	insert into product_repair (id, code, name, 
+      price)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL})
+  </insert>
+  
+  <insert id="insert" >
+    insert into product_repair (id, code, name, 
+      price)
+    values (#{id,jdbcType=BIGINT}, #{code,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.ProductRepair" >
+    insert into product_repair
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.ProductRepair" >
+    update product_repair
+    <set >
+      <if test="code != null" >
+        code = #{code,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.ProductRepair" >
+    update product_repair
+    set code = #{code,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 根据id编辑选中信息 -->
+  <update id="updateByid" parameterType="com.xiongantaoli.background.entity.ProductRepair" >
+    update product_repair
+    set code = #{code,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <select id="selectCountByCode" resultType="java.math.BigDecimal" parameterType="java.lang.Integer">
+  	select price 
+    from product_repair
+    where code = #{code,jdbcType=BIGINT}
+  </select>
+</mapper>

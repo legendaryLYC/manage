@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:include="_meta :: header">
+<title>统计查看</title>
+</head>
+<body>
+<style>
+	body{
+		background:#f5fafe;
+	}
+	.bg{
+		width:100%;
+		height:400px;
+		border-radius:6px;
+		margin-top:50px;
+		box-shadow: 1px 1px 1px #fff;
+	}
+	.top{
+		width:92%;
+		height:100px;
+		font-size:14px;
+		font-weight:900;
+		margin-left: 8%;
+    	margin-top: 70px;
+	}
+	.content{
+		width:100%;
+		height:300px;
+	}
+	.div{
+		background:#e26843b3;
+		width:200px;
+		height:150px;
+		float:left;
+		margin-left:8%;
+		border-radius:6px;
+		box-shadow: 10px 10px 5px #888888;
+	}
+	h3{
+		text-align:center;
+		font-weight:900;
+	}
+</style>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 统计分析 <span class="c-gray en">&gt;</span> 统计分析 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<article class="page-container">
+	<div class="bg">
+		<div class = "top">
+			<form action="/royalty/caculate" method="post" id="form">
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-3" style="width: 15%;"><span class="c-red">*</span>开始时间：</label>
+					<div class="formControls col-xs-5 col-sm-6" style="width: 15%;">
+						<input type="text" style=" height: 25px;"
+							autocomplete="off" id="purchaseTimeString" th:value = "${beginTime}" onfocus="WdatePicker({el:$dp.$('purchaseTime'),dateFmt:'yyyy-MM-dd'})"
+							name="beginTime" class="input-text Wdate" readonly="readonly"/>
+					</div>
+					<label class="form-label col-xs-4 col-sm-3" style="width: 15%;"><span class="c-red">*</span>结束时间：</label>
+					<div class="formControls col-xs-5 col-sm-6" style="width: 15%;">
+						<input type="text" style=" height: 25px;"
+							autocomplete="off" id="purchaseTimeString" th:value = "${endTime}" onfocus="WdatePicker({el:$dp.$('purchaseTime'),dateFmt:'yyyy-MM-dd'})" 
+							name="endTime" class="input-text Wdate" readonly="readonly"/>
+					</div>
+					<button class="btn btn-success radius" id="subbtn" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"style="margin-left: 28px;height: 28px;"><i class="Hui-iconfont">&#xe665;</i> 查询</button>
+				</div>
+				</form>
+		</div>
+		<div class="content">
+			<div class="div">
+				<h3>总成交金额</h3>
+				<p style="text-align:center;" th:text="${royaltyModel.total}"/>
+			</div>
+			<div class="div">
+				<h3>总成本</h3>
+				<p style="text-align:center;" th:text="${royaltyModel.base}"/>
+			</div>
+			<div class="div">
+				<h3>总提成</h3>
+				<p style="text-align:center;" th:text="${royaltyModel.royalty}"/>
+			</div>
+			<div class="div">
+				<h3>总利润</h3>
+				<p style="text-align:center;" th:text="${royaltyModel.total - royaltyModel.base - royaltyModel.royalty}"/>
+			</div>
+		</div>
+	</div>
+</article>
+
+<!--_footer 作为公共模版分离出去--> 
+<div th:replace="_footer :: footerjs"></div>
+ <!--/_footer 作为公共模版分离出去-->
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/jquery.validate.js}" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/validate-methods.js}" src="lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" th:src="@{/lib/jquery.validation/1.14.0/messages_zh.js}"  src="lib/jquery.validation/1.14.0/messages_zh.js"></script> 
+<script type="text/javascript" th:src="@{/lib/My97DatePicker/4.8/WdatePicker.js}"  src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript">
+
+// $('input[type=radio][name=state]').change(function() {
+// 	var form = document.getElementById('form');
+// 	//再次修改input内容
+// 	form.submit();
+// });
+
+var result;
+//选择品牌事件
+$("#brand").change(function() {
+	//先清空型号
+	if($("#brand").val()==""){
+		//啥都不做
+	}else{
+		chooseDic("brand",$("#brand").val(), 0);
+		for (i in result){
+			$('#model').append("<option value='"+result[i].model+"'>"+result[i].modelname+"</option>");
+		}
+	}
+});
+//选择型号事件
+$("#model").change(function() {
+	//先清空规格
+	$("#productId").empty();
+	$('#productId').append("<option value=''>待选择</option>");
+	if($("#model").val()==""){
+		//啥都不做
+	}else{
+		chooseDic("model",$("#brand").val(),$("#model").val());
+		for (i in result){
+			$('#productId').append("<option value='"+result[i].id+"'>"+result[i].standardname+"</option>");
+		}
+	}
+});
+//选择下拉菜单时和后台要字典的交互方法
+function chooseDic(who,code1,code2){
+	var toServer={
+		who : who,
+		code1 : code1,
+		code2 : code2
+	}
+	//此处请求后台程序，下方是成功后的前台处理……
+	$.ajax({
+		type: 'POST',
+		url: "/purchase/getModel",
+		dataType: 'json',
+		data:toServer,
+		async:false,
+		success: function(data){
+			//返回服务器返回的字典对象
+			result = data;
+		},
+		error:function(data) {
+			console.log(data.msg);
+		},
+	});
+}
+$(function(){
+	
+	$("#form-purchase-add").validate({
+		rules:{
+			operator:{
+				required:true,
+			},
+			customerName:{
+				required:true,
+			},
+			orderNum:{
+				required:true,
+				digits:true,
+			},
+			purchaseMethod:{
+				required:true,
+			},
+			brand:{
+				required:true,
+			},
+			model:{
+				required:true,
+			},
+			color:{
+				required:true,
+			},
+			guarantee:{
+				required:true,
+			},
+			apperance:{
+				required:true,
+			},
+			orderState:{
+				required:true,
+			},
+			randomAttachment:{
+				required:true,
+			},
+			serialNum:{
+				required:true,
+				digits:true,
+			},
+			purchasePrice:{
+				required:true,
+				 number: true,     //输入必须是数字
+                 min: 0.01,          //输入的数字最小值为0.01，不能为0或者负数
+                 minNumber: $("#purchasePrice").val()    //调用自定义验证
+			},
+			finalPurchase:{
+				required:true,
+				 number: true,     //输入必须是数字
+                 min: 0.01,          //输入的数字最小值为0.01，不能为0或者负数
+                 minNumber: $("#purchasePrice").val()    //调用自定义验证
+			},
+			qualityPrice:{
+				required:true,
+				 number: true,     //输入必须是数字
+                 min: 0.01,          //输入的数字最小值为0.01，不能为0或者负数
+                 minNumber: $("#purchasePrice").val()    //调用自定义验证
+			},
+			purchaseTime:{
+				required:true,
+				dateISO:true,
+			},
+		},
+		onkeyup:false,
+		success:"valid",
+		submitHandler:function(form){
+			$(form).ajaxSubmit({
+				type: 'get',
+				url: "/purchase/updateOrder" ,
+				success: function(data){
+					if(data.message == "success"){
+						//禁止重复提交
+						$('#subbtn').attr("type","button");
+						layer.msg('修改成功!',{icon:1,time:1000},function(){
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.location.reload();
+							parent.layer.close(index); 
+						});
+					}else{
+						layer.msg('修改失败!请重试',{icon:1,time:1000});
+					}
+				},
+                error: function(XmlHttpRequest, textStatus, errorThrown){
+					layer.msg('error!',{icon:1,time:1000});
+				}
+			});
+		
+		}
+	});
+});
+//自定义validate验证输入的数字小数点位数不能大于两位
+jQuery.validator.addMethod("minNumber",function(value, element){
+    var returnVal = true;
+    inputZ=value;
+    var ArrMen= inputZ.split(".");    //截取字符串
+    if(ArrMen.length==2){
+        if(ArrMen[1].length>2){    //判断小数点后面的字符串长度
+            returnVal = false;
+            return false;
+        }
+    }
+    return returnVal;
+},"小数点后最多为两位");         //验证错误信息
+$('#cancel').on('click',function(){
+	window.close();
+});
+//关闭窗口
+function window_close(){
+   	var index = parent.layer.getFrameIndex(window.name);
+	parent.layer.close(index); 
+}
+//加载时请求回显型号和规格
+$(function(){
+	chooseDic("model",$("#brand").val(),$("#model").val());
+	for (i in result){
+		if($('#productIdRecord').text()==result[i].id){
+			$('#productId').append("<option value='"+result[i].id+"'>"+result[i].standardname+"</option>");
+		}
+	}
+});
+</script> 
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

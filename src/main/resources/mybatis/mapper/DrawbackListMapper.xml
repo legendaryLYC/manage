@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.DrawbackListMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.DrawbackList" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="purchase_id" property="purchaseId" jdbcType="BIGINT" />
+    <result column="logistics_num" property="logisticsNum" jdbcType="VARCHAR" />
+    <result column="logistics_company" property="logisticsCompany" jdbcType="VARCHAR" />
+    <result column="carriage_price" property="carriagePrice" jdbcType="DECIMAL" />
+    <result column="time" property="time" jdbcType="DATE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, purchase_id, logistics_num, logistics_company, carriage_price, time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from drawback_list
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from drawback_list
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.xiongantaoli.background.entity.DrawbackList" >
+    insert into drawback_list (id, user_id, purchase_id, 
+      logistics_num, logistics_company, carriage_price, 
+      time)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{purchaseId,jdbcType=BIGINT}, 
+      #{logisticsNum,jdbcType=VARCHAR}, #{logisticsCompany,jdbcType=VARCHAR}, #{carriagePrice,jdbcType=DECIMAL}, 
+      #{time,jdbcType=DATE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.DrawbackList" >
+    insert into drawback_list
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="purchaseId != null" >
+        purchase_id,
+      </if>
+      <if test="logisticsNum != null" >
+        logistics_num,
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company,
+      </if>
+      <if test="carriagePrice != null" >
+        carriage_price,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="purchaseId != null" >
+        #{purchaseId,jdbcType=BIGINT},
+      </if>
+      <if test="logisticsNum != null" >
+        #{logisticsNum,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompany != null" >
+        #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="carriagePrice != null" >
+        #{carriagePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=DATE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.DrawbackList" >
+    update drawback_list
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="purchaseId != null" >
+        purchase_id = #{purchaseId,jdbcType=BIGINT},
+      </if>
+      <if test="logisticsNum != null" >
+        logistics_num = #{logisticsNum,jdbcType=VARCHAR},
+      </if>
+      <if test="logisticsCompany != null" >
+        logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="carriagePrice != null" >
+        carriage_price = #{carriagePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.DrawbackList" >
+    update drawback_list
+    set user_id = #{userId,jdbcType=BIGINT},
+      purchase_id = #{purchaseId,jdbcType=BIGINT},
+      logistics_num = #{logisticsNum,jdbcType=VARCHAR},
+      logistics_company = #{logisticsCompany,jdbcType=VARCHAR},
+      carriage_price = #{carriagePrice,jdbcType=DECIMAL},
+      time = #{time,jdbcType=DATE}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <delete id="deleteByPurchaseId">
+  delete from drawback_list
+    where purchase_id = #{key}
+  </delete>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+   	SELECT
+   	<include refid="Base_Column_List" />
+	FROM
+	drawback_list where 1 = 1
+	 <if test="beginTime != null and beginTime != '' " >
+   		and time <![CDATA[>=]]> #{beginTime ,jdbcType=VARCHAR}
+   	</if>
+   	<if test="endTime != null and endTime != '' " >
+   		and time <![CDATA[<=]]> #{endTime ,jdbcType=VARCHAR}
+   	</if>
+   	
+  </select>
+</mapper>

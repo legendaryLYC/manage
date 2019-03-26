@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiongantaoli.background.mapper.ProductInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.xiongantaoli.background.entity.ProductInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="brand" property="brand" jdbcType="INTEGER" />
+    <result column="model" property="model" jdbcType="INTEGER" />
+    <result column="standard" property="standard" jdbcType="INTEGER" />
+    <result column="base_royalty" property="baseRoyalty" jdbcType="DECIMAL" />
+    <result column="sale_royalty" property="saleRoyalty" jdbcType="DECIMAL" />
+    <result column="scratch_price" property="scratchPrice" jdbcType="DECIMAL" />
+    <result column="knock_price" property="knockPrice" jdbcType="DECIMAL" />
+    <result column="packing_price" property="packingPrice" jdbcType="DECIMAL" />
+    <result column="attachment_price" property="attachmentPrice" jdbcType="DECIMAL" />
+    <result column="base_price" property="basePrice" jdbcType="DECIMAL" />
+    <result column="scratch_pricetwo" property="scratchPriceTwo" jdbcType="DECIMAL" />
+    <result column="knock_pricetwo" property="knockPriceTwo" jdbcType="DECIMAL" />
+    <result column="nationlock" property="nationLock" jdbcType="DECIMAL" />
+    <result column="warranty" property="warranty" jdbcType="DECIMAL" />
+  </resultMap>
+    <resultMap id="BaseResultMap2" type="com.xiongantaoli.background.form.ProductInfoForm" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="brand" property="brand" jdbcType="INTEGER" />
+    <result column="model" property="model" jdbcType="INTEGER" />
+    <result column="standard" property="standard" jdbcType="INTEGER" />
+    <result column="base_royalty" property="baseRoyalty" jdbcType="DECIMAL" />
+    <result column="sale_royalty" property="saleRoyalty" jdbcType="DECIMAL" />
+    <result column="scratch_price" property="scratchPrice" jdbcType="DECIMAL" />
+    <result column="knock_price" property="knockPrice" jdbcType="DECIMAL" />
+    <result column="packing_price" property="packingPrice" jdbcType="DECIMAL" />
+    <result column="attachment_price" property="attachmentPrice" jdbcType="DECIMAL" />
+    <result column="base_price" property="basePrice" jdbcType="DECIMAL" />
+    <result column="scratch_pricetwo" property="scratchPriceTwo" jdbcType="DECIMAL" />
+    <result column="knock_pricetwo" property="knockPriceTwo" jdbcType="DECIMAL" />
+    <result column="nationlock" property="nationLock" jdbcType="DECIMAL" />
+    <result column="warranty" property="warranty" jdbcType="DECIMAL" />
+    <result column="brandname" property="brandname" jdbcType="VARCHAR" />
+    <result column="modelname" property="modelname" jdbcType="VARCHAR" />
+    <result column="standardname" property="standardname" jdbcType="VARCHAR" />
+  </resultMap>
+
+   <sql id="Base_Column_List" >
+    id, brand, model, standard, base_royalty, sale_royalty, scratch_price, knock_price, 
+    packing_price, attachment_price, base_price, scratch_pricetwo, knock_pricetwo, nationlock, 
+    warranty
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from product_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.xiongantaoli.background.entity.ProductInfo" >
+    insert into product_info (id, brand, model, 
+      standard, base_royalty, sale_royalty, 
+      scratch_price, knock_price, packing_price, 
+      attachment_price, base_price, scratch_pricetwo, 
+      knock_pricetwo, nationlock, warranty
+      )
+    values (#{id,jdbcType=BIGINT}, #{brand,jdbcType=INTEGER}, #{model,jdbcType=INTEGER}, 
+      #{standard,jdbcType=INTEGER}, #{baseRoyalty,jdbcType=DECIMAL}, #{saleRoyalty,jdbcType=DECIMAL}, 
+      #{scratchPrice,jdbcType=DECIMAL}, #{knockPrice,jdbcType=DECIMAL}, #{packingPrice,jdbcType=DECIMAL}, 
+      #{attachmentPrice,jdbcType=DECIMAL}, #{basePrice,jdbcType=DECIMAL}, #{scratchPriceTwo,jdbcType=DECIMAL}, 
+      #{knockPriceTwo,jdbcType=DECIMAL}, #{nationLock,jdbcType=DECIMAL}, #{warranty,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertNew" parameterType="com.xiongantaoli.background.form.NewProductDto" >
+		insert into product_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="brand != null" >
+        brand,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="standard != null" >
+        standard,
+      </if>
+      <if test="scratchPrice != null" >
+        scratch_price,
+      </if>
+      <if test="knockPrice != null" >
+        knock_price,
+      </if>
+      <if test="packingPrice != null" >
+        packing_price,
+      </if>
+      <if test="attachmentPrice != null" >
+        attachment_price,
+      </if>
+      <if test="basePrice != null" >
+        base_price,
+      </if>
+      <if test="baseRoyaltyPrice != null" >
+        base_royalty,
+      </if>
+      <if test="saleRoyaltyPrice != null" >
+        sale_royalty,
+      </if>
+      <if test="scratchPriceTwo != null" >
+        scratch_pricetwo,
+      </if>
+      <if test="knockPriceTwo != null" >
+        knock_pricetwo,
+      </if>
+      <if test="nationLock != null" >
+        nationlock,
+      </if>
+      <if test="warranty != null" >
+        warranty,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="brand != null" >
+        #{brand,jdbcType=INTEGER},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=INTEGER},
+      </if>
+      <if test="standard != null" >
+        #{standard,jdbcType=INTEGER},
+      </if>
+      <if test="scratchPrice != null" >
+        #{scratchPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="knockPrice != null" >
+        #{knockPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingPrice != null" >
+        #{packingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="attachmentPrice != null" >
+        #{attachmentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="basePrice != null" >
+        #{basePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="baseRoyaltyPrice != null" >
+        #{baseRoyaltyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="saleRoyaltyPrice != null" >
+        #{saleRoyaltyPrice,jdbcType=DECIMAL},
+      </if>
+       <if test="scratchPriceTwo != null" >
+        #{scratchPriceTwo,jdbcType=DECIMAL},
+      </if>
+      <if test="knockPriceTwo != null" >
+        #{knockPriceTwo,jdbcType=DECIMAL},
+      </if>
+      <if test="nationLock != null" >
+        #{nationLock,jdbcType=DECIMAL},
+      </if>
+      <if test="warranty != null" >
+        #{warranty,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiongantaoli.background.entity.ProductInfo" >
+    insert into product_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="brand != null" >
+        brand,
+      </if>
+      <if test="model != null" >
+        model,
+      </if>
+      <if test="standard != null" >
+        standard,
+      </if>
+      <if test="baseRoyaltyPrice != null" >
+        base_royalty,
+      </if>
+      <if test="saleRoyaltyPrice != null" >
+        sale_royalty,
+      </if>
+      <if test="scratchPrice != null" >
+        scratch_price,
+      </if>
+      <if test="knockPrice != null" >
+        knock_price,
+      </if>
+      <if test="packingPrice != null" >
+        packing_price,
+      </if>
+      <if test="attachmentPrice != null" >
+        attachment_price,
+      </if>
+      <if test="basePrice != null" >
+        base_price,
+      </if>
+      <if test="scratchPriceTwo != null" >
+        scratch_pricetwo,
+      </if>
+      <if test="knockPriceTwo != null" >
+        knock_pricetwo,
+      </if>
+      <if test="nationLock != null" >
+        nationlock,
+      </if>
+      <if test="warranty != null" >
+        warranty,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="brand != null" >
+        #{brand,jdbcType=INTEGER},
+      </if>
+      <if test="model != null" >
+        #{model,jdbcType=INTEGER},
+      </if>
+      <if test="standard != null" >
+        #{standard,jdbcType=INTEGER},
+      </if>
+      <if test="baseRoyaltyPrice != null" >
+        #{baseRoyaltyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="saleRoyaltyPrice != null" >
+        #{saleRoyaltyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="scratchPrice != null" >
+        #{scratchPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="knockPrice != null" >
+        #{knockPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingPrice != null" >
+        #{packingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="attachmentPrice != null" >
+        #{attachmentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="basePrice != null" >
+        #{basePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="scratchPriceTwo != null" >
+        scratch_pricetwo,
+      </if>
+      <if test="knockPriceTwo != null" >
+        knock_pricetwo,
+      </if>
+      <if test="nationLock != null" >
+        nationlock,
+      </if>
+      <if test="warranty != null" >
+        warranty,
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiongantaoli.background.entity.ProductInfo" >
+    update product_info
+    <set >
+      <if test="brand != null" >
+        brand = #{brand,jdbcType=INTEGER},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=INTEGER},
+      </if>
+      <if test="standard != null" >
+        standard = #{standard,jdbcType=INTEGER},
+      </if>
+      <if test="baseRoyalty != null" >
+        base_royalty = #{baseRoyalty,jdbcType=DECIMAL},
+      </if>
+      <if test="saleRoyalty != null" >
+        sale_royalty = #{saleRoyalty,jdbcType=DECIMAL},
+      </if>
+      <if test="scratchPrice != null" >
+        scratch_price = #{scratchPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="knockPrice != null" >
+        knock_price = #{knockPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingPrice != null" >
+        packing_price = #{packingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="attachmentPrice != null" >
+        attachment_price = #{attachmentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="basePrice != null" >
+        base_price = #{basePrice,jdbcType=DECIMAL},
+      </if>
+       <if test="scratchPriceTwo != null" >
+        scratch_pricetwo = #{scratchPriceTwo,jdbcType=DECIMAL},
+      </if>
+      <if test="knockPriceTwo != null" >
+        knock_pricetwo = #{knockPriceTwo,jdbcType=DECIMAL},
+      </if>
+      <if test="nationLock != null" >
+        nationlock = #{nationLock,jdbcType=DECIMAL},
+      </if>
+      <if test="warranty != null" >
+        warranty = #{warranty,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByDtoKey" parameterType="com.xiongantaoli.background.form.NewProductDto" >
+    update product_info
+    <set >
+      <if test="brand != null" >
+        brand = #{brand,jdbcType=INTEGER},
+      </if>
+      <if test="model != null" >
+        model = #{model,jdbcType=INTEGER},
+      </if>
+      <if test="standard != null" >
+        standard = #{standard,jdbcType=INTEGER},
+      </if>
+      <if test="scratchPrice != null" >
+        scratch_price = #{scratchPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="knockPrice != null" >
+        knock_price = #{knockPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="packingPrice != null" >
+        packing_price = #{packingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="attachmentPrice != null" >
+        attachment_price = #{attachmentPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="basePrice != null" >
+        base_price = #{basePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="baseRoyaltyPrice != null" >
+        base_royalty = #{baseRoyaltyPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="saleRoyaltyPrice != null" >
+        sale_royalty = #{saleRoyaltyPrice,jdbcType=DECIMAL},
+      </if>
+       <if test="scratchPriceTwo != null" >
+        scratch_pricetwo = #{scratchPriceTwo,jdbcType=DECIMAL},
+      </if>
+      <if test="knockPriceTwo != null" >
+        knock_pricetwo = #{knockPriceTwo,jdbcType=DECIMAL},
+      </if>
+      <if test="nationLock != null" >
+        nationlock = #{nationLock,jdbcType=DECIMAL},
+      </if>
+      <if test="warranty != null" >
+        warranty = #{warranty,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.xiongantaoli.background.entity.ProductInfo" >
+    update product_info
+    set   brand = #{brand,jdbcType=INTEGER},
+	      model = #{model,jdbcType=INTEGER},
+	      standard = #{standard,jdbcType=INTEGER},
+	      base_royalty = #{baseRoyalty,jdbcType=DECIMAL},
+	      sale_royalty = #{saleRoyalty,jdbcType=DECIMAL},
+	      scratch_price = #{scratchPrice,jdbcType=DECIMAL},
+	      knock_price = #{knockPrice,jdbcType=DECIMAL},
+	      packing_price = #{packingPrice,jdbcType=DECIMAL},
+	      attachment_price = #{attachmentPrice,jdbcType=DECIMAL},
+	      base_price = #{basePrice,jdbcType=DECIMAL},
+	      scratch_pricetwo = #{scratchPriceTwo,jdbcType=DECIMAL},
+	      knock_pricetwo = #{knockPriceTwo,jdbcType=DECIMAL},
+	      nationlock = #{nationLock,jdbcType=DECIMAL},
+	      warranty = #{warranty,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+   </update>	
+	
+   <select id="selectByAllCondition" resultMap="BaseResultMap2" >
+         
+             SELECT
+	product_info.id,
+	product_info.brand,
+	product_info.model,
+	product_info.standard,
+	product_info.base_royalty,
+	product_info.sale_royalty,
+	product_info.scratch_price,
+	product_info.knock_price,
+	product_info.packing_price,
+	product_info.attachment_price,
+	product_info.base_price,
+	product_info.scratch_pricetwo,
+	product_info.knock_pricetwo,
+	product_info.nationlock,
+	product_info.warranty,
+	product_brand.`name` as brandname,
+	product_model.`name` as modelname,
+	product_standard.`name` as standardname
+	FROM
+	product_info
+	INNER JOIN product_model ON product_info.model = product_model.`code`
+	INNER JOIN product_brand ON product_info.brand = product_brand.`code`
+	INNER JOIN product_standard ON product_info.standard = product_standard.`code`
+	WHERE
+	product_info.id in (
+	select 
+   	product_info.id
+    from product_info
+    where 1 = 1 
+         <if test="brand != null" >
+          and brand = #{brand}
+         </if>
+          <if test="model != null" >
+         and model = #{model}
+         </if>
+         <if test="standard != null" >
+          and standard = #{standard} 
+         </if>)
+   </select>
+   <select id="selectAll" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_info         
+   </select>
+   
+   <select id="selectBms" resultType="java.lang.Long" >
+    select 
+    id
+    from product_info
+    where brand = #{brand} and model = #{model} and standard = #{standard}
+   </select>
+   
+   <select id="selectByThree" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_info
+    where brand = #{brand} and model = #{model} and standard = #{standard}
+   </select>
+   
+   <select id="selectProductInfo" resultMap="BaseResultMap2" >
+    SELECT
+	product_info.id,
+	product_info.brand,
+	product_info.model,
+	product_info.standard,
+	product_info.base_royalty,
+	product_info.sale_royalty,
+	product_info.scratch_price,
+	product_info.knock_price,
+	product_info.packing_price,
+	product_info.attachment_price,
+	product_info.base_price,
+	product_info.scratch_pricetwo,
+	product_info.knock_pricetwo,
+	product_info.nationlock,
+	product_info.warranty,
+	product_brand.`name` as brandname,
+	product_model.`name` as modelname,
+	product_standard.`name` as standardname
+	FROM
+	product_brand
+	INNER JOIN product_info ON product_info.brand = product_brand.`code`
+	INNER JOIN product_standard ON product_info.standard = product_standard.`code`
+	INNER JOIN product_model ON product_info.model = product_model.`code`
+   </select>
+   <select id="selectProductInfoFormsSelective" resultMap="BaseResultMap2" >
+    SELECT
+		product_info.id,
+		product_info.brand,
+	    product_info.model ,
+		product_info.standard,
+		product_info.base_royalty,
+		product_info.sale_royalty,
+		product_info.scratch_price,
+		product_info.knock_price,
+		product_info.packing_price,
+		product_info.attachment_price,
+		product_info.base_price,
+		product_info.scratch_pricetwo,
+		product_info.knock_pricetwo,
+		product_info.nationlock,
+		product_info.warranty,
+		product_brand.`name` as brandname,
+		product_model.`name` as modelname,
+		product_standard.`name` as standardname
+	FROM 
+		product_info
+		INNER JOIN product_brand ON product_info.brand = product_brand.`code`
+		INNER JOIN product_standard ON product_info.standard = product_standard.`code`
+		INNER JOIN product_model ON product_info.model = product_model.`code`
+		<where>
+	         <if test="brand != null" >
+	          and brand = #{brand}
+	         </if>
+	          <if test="model != null" >
+	         and model = #{model}
+	         </if>
+	         <if test="standard != null" >
+	          and standard = #{standard} 
+	         </if>
+   		</where>
+   </select>
+     <select id="selectByFormPrimaryKey" resultMap="BaseResultMap2"  >
+	SELECT
+	product_info.id,
+	product_info.brand,
+	product_info.model,
+	product_info.standard,
+	product_info.base_royalty,
+	product_info.sale_royalty,
+	product_info.scratch_price,
+	product_info.knock_price,
+	product_info.packing_price,
+	product_info.attachment_price,
+	product_info.base_price,
+	product_info.scratch_pricetwo,
+	product_info.knock_pricetwo,
+	product_info.nationlock,
+	product_info.warranty,
+	product_brand.`name` as brandname,
+	product_model.`name` as modelname,
+	product_standard.`name` as standardname
+	FROM
+	product_info
+	INNER JOIN product_model ON product_info.model = product_model.`code`
+	INNER JOIN product_brand ON product_info.brand = product_brand.`code`
+	INNER JOIN product_standard ON product_info.standard = product_standard.`code`
+	WHERE
+	product_info.id=#{id}
+    </select>
+</mapper>
